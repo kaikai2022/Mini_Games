@@ -1,0 +1,96 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
+
+    defaultConfig {
+        applicationId "org.cocos2dx.MyLuaGame"
+        targetSdkVersion 32
+        minSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+
+// 苹果M1芯片新macbook无法使用ndk-r14编译出so的情况，需注释掉编译的代码
+        externalNativeBuild {
+            ndkBuild {
+                targets "cocos2dlua"
+                arguments "-j" + Runtime.runtime.availableProcessors()
+                arguments "NDK_MODULE_PATH=${project.projectDir}/../../../cocos2d-x/:${project.projectDir}/../../../cocos2d-x/cocos/:${project.projectDir}/../../../cocos2d-x/external/:${project.projectDir}/../../../cocos2d-x/cocos/scripting/"
+//                编译 v7a + v8a 两份库会导致编译时间过长，可以根据实际需要选择
+//                abiFilters.addAll(['arm64-v8a'])
+                abiFilters.addAll(['armeabi-v7a', 'arm64-v8a'])
+            }
+        }
+        ndk {
+//            abiFilters 'arm64-v8a'
+//            编译 v7a + v8a 两份库会导致编译时间过长，可以根据实际需要选择
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+
+//     苹果M1芯片新macbook无法使用ndk-r14编译出so的情况，需注释掉编译的代码
+    externalNativeBuild {
+        ndkBuild {
+            path file('jni/Android.mk')
+        }
+    }
+
+    sourceSets.main {
+        java.srcDir "src"
+        res.srcDir "res"
+//     苹果M1芯片新macbook无法使用ndk-r14编译出so的情况，需开启jnilibs使用已经编译好的so进行调试、打包操作
+//        jniLibs.srcDirs = ['libs']
+        manifest.srcFile "AndroidManifest.xml"
+        assets.srcDir "assets"
+    }
+
+    signingConfigs {
+
+       release {
+            if (project.hasProperty("RELEASE_STORE_FILE")) {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (project.hasProperty("KEY_STORE")) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+}
+
+android.applicationVariants.all { variant ->
+    def project_root_folder = "${projectDir}/../../../../"
+    def dest_assets_folder = "${projectDir}/assets"
+
+    // delete previous files first
+    delete dest_assets_folder
+    def targetName = variant.name.capitalize()
+    def copyTaskName = "copy${targetName}ResourcesToAssets"
+
+    tasks.register(copyTaskName) {
+        copy {
+            from project_root_folder + "/res"
+            into dest_assets_folder + "/res"
+        }
+        copy {
+            from project_root_folder + "/src"
+            into dest_assets_folder + "/src"
+        }
+    }
+    tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':libcocos2dx')
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/proj.android-studio.iml" filepath="$PROJECT_DIR$/.idea/modules/proj.android-studio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/proj.android-studio.MyLuaGame.iml" filepath="$PROJECT_DIR$/.idea/modules/app/proj.android-studio.MyLuaGame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/proj.android-studio.MyLuaGame.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/proj.android-studio.MyLuaGame.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/proj.android-studio.MyLuaGame.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/proj.android-studio.MyLuaGame.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1300812936/proj.android-studio.libcocos2dx.iml" filepath="$PROJECT_DIR$/.idea/modules/-1300812936/proj.android-studio.libcocos2dx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1300812936/proj.android-studio.libcocos2dx.main.iml" filepath="$PROJECT_DIR$/.idea/modules/-1300812936/proj.android-studio.libcocos2dx.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1300812936/proj.android-studio.libcocos2dx.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/-1300812936/proj.android-studio.libcocos2dx.unitTest.iml" />
+    </modules>
+  </component>
+</project>
