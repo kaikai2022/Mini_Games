@@ -22,9 +22,10 @@ local function main()
     end
     --local layer = require("SuperBear.MainScene").new()   -- 竖版游戏
     --local layer = require("JumpingTheGantry.MainScene").new()   -- 跳龙门
-    local layer = require("PartyWheel.MainScene").new()   -- PartWheel
+    --local layer = require("PartyWheel.MainScene").new()   -- PartWheel
 
-    -- local layer = require("RunFromBlack.MainScene").new()   -- 横版游戏
+     --local layer = require("RunFromBlack.MainScene").new()   -- 横版游戏
+    local layer = require("GuessTheIdiom.MainScene").new()   -- 猜谜语
     scene:addChild(layer)
 
     display.runScene(scene)
