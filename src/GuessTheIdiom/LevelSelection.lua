@@ -11,6 +11,8 @@ end)
 local IdiomConfig = clone(require("GuessTheIdiom.IdiomConfig"))
 
 local LevelPanel = require("GuessTheIdiom.LevelPanel")
+local Sound = require("GuessTheIdiom.Sound")
+
 function LevelSelection:ctor(parent)
     if (parent) then
         self:addTo(parent)
@@ -18,7 +20,9 @@ function LevelSelection:ctor(parent)
             :setPosition(0, 0)
         --    :setPosition(display.cx, display.cy)
     end
-
+    self.joinGameCallback = self.joinGameCallback or function(leave)
+        print(leave)
+    end
     local title = display.newSprite("GuessTheIdiom/images/LevelSelection/title.png")
                          :setAnchorPoint(cc.p(0.5, 1))
                          :addTo(self)
@@ -54,8 +58,12 @@ function LevelSelection:ctor(parent)
         local panel = LevelPanel.new(self.contentPageView, index)
         count = count + LevelPanel.lineMax * LevelPanel.lineItemCount
         index = index + 1
+        panel:setClickBtnEventListener(function(leave)
+            if self.joinGameCallback then
+                self.joinGameCallback(leave)
+            end
+        end)
     end
-
     self.contentPageView:setCurrentPageIndex(0)
     self:scheduleUpdateWithPriorityLua(handler(self, self._Update), 0)
     self:_UpdateLevelText()
@@ -67,6 +75,7 @@ function LevelSelection:ctor(parent)
                            :move(-180, -40)
     leftButton:addClickEventListener(function()
         print("上一页")
+        Sound.onClicked()
         if (self.contentPageView:getCurrentPageIndex() > 0) then
             self.contentPageView:setCurrentPageIndex(self.contentPageView:getCurrentPageIndex() - 1)
         end
@@ -79,6 +88,7 @@ function LevelSelection:ctor(parent)
                             :move(180, -40)
     rightButton:addClickEventListener(function()
         print("下一页")
+        Sound.onClicked()
         if (self.contentPageView:getCurrentPageIndex() < index) then
             self.contentPageView:setCurrentPageIndex(self.contentPageView:getCurrentPageIndex() + 1)
         end
@@ -103,6 +113,12 @@ function LevelSelection:onEvent(sender, event)
         local pageNum = sender:getCurrentPageIndex()
         print("is turning,this PageNum:" .. pageNum)
     end
+end
+
+---@public setJoinGameCallback 进入游戏
+---@param callback function 进入游戏的回调
+function LevelSelection:setJoinGameCallback(callback)
+    self.joinGameCallback = callback
 end
 
 return LevelSelection

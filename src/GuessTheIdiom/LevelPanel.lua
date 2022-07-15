@@ -7,6 +7,7 @@
 local LevelPanel = class("LevelPanel", function()
     return ccui.Layout:create()
 end)
+local Sound = require("GuessTheIdiom.Sound")
 
 LevelPanel.lineMax = 3
 LevelPanel.lineItemCount = 8
@@ -75,7 +76,7 @@ function LevelPanel:ctor(parent, pageIndex)
                                 :move(buttonContentSize.width / 2, buttonContentSize.height / 2)
 
             button:scheduleUpdateWithPriorityLua(function()
-                local index = cc.UserDefault:getInstance():getIntegerForKey("GuessTheIdiom_NowLeave") + 1
+                local index = cc.UserDefault:getInstance():getIntegerForKey(require("GuessTheIdiom.UserDefaultKey")) + 1
                 if (tag > index) then
                     icon:show()
                     leaveText:hide()
@@ -84,6 +85,12 @@ function LevelPanel:ctor(parent, pageIndex)
                     leaveText:show()
                 end
             end, 0)
+            button:addClickEventListener(function()
+                Sound.onClicked()
+                if (self.callback) then
+                    self.callback(tag)
+                end
+            end)
         end
         panel:setLayoutType(ccui.LayoutType.HORIZONTAL)
         --panel:requestDoLayout()
@@ -97,22 +104,5 @@ end
 function LevelPanel:setClickBtnEventListener(callback)
     self.callback = callback
 end
---
---function LevelPanel:_Update(timer)
---    if self.nowIndex == cc.UserDefault:getInstance():getIntegerForKey("GuessTheIdiom_NowLeave") + 1 then
---        return
---    end
---    self.nowIndex = cc.UserDefault:getInstance():getIntegerForKey("GuessTheIdiom_NowLeave") + 1
---    for index, button in pairs(LevelPanel.buttons) do
---        local children = button:getChildren()
---        if (index > self.nowIndex) then
---            children[1]:hide()
---            children[2]:show()
---        else
---            children[1]:hide()
---            children[1]:show()
---        end
---    end
---end
 
 return LevelPanel

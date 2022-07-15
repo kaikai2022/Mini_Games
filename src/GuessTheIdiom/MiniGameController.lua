@@ -8,16 +8,20 @@ local LevelSelection = require("GuessTheIdiom.LevelSelection")
 
 local Sound = require("GuessTheIdiom.Sound")
 local ButtonSound = require("GuessTheIdiom.SoundButtonNode")
+
+local GameLayout = require("GuessTheIdiom.GameLayout")
 function MiniGameController:ctor(mainNode)
     self.mainNode = mainNode
     self.levelSelectionNode = LevelSelection:create(self.mainNode)
     self.levelSelectionNode:setPosition(display.cx, display.cy)
+    self.levelSelectionNode:setJoinGameCallback(handler(self, self.joinGame))
+    self.levelSelectionNode:hide()
     self:initScene()
-    self.gameNode:hide()
 end
 
 function MiniGameController:start()
     self.gameNode:hide()
+    self.levelSelectionNode:show()
 end
 
 function MiniGameController:initScene()
@@ -48,8 +52,20 @@ function MiniGameController:initScene()
         print("点击了开始游戏")
     end)
 
-    ButtonSound:create(self.gameNode)
-               :setPosition(display.cx - 200, display.cy - 100)
+    ButtonSound:create(self.mainNode)
+               :setAnchorPoint(cc.p(1, 1))
+               :setPosition(display.width - 100, display.height - 100)
+end
+
+---@private 进入游戏
+---@param leave number 进入游戏的的游戏等级
+function MiniGameController:joinGame(leave)
+    print("进入游戏", leave)
+    if not self.gameLayout then
+        self.gameLayout = GameLayout:create(self.mainNode)
+    end
+    self.levelSelectionNode:hide()
+    self.gameLayout:initGame(leave)
 end
 
 return MiniGameController
