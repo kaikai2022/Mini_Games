@@ -47,7 +47,7 @@ function SoundButtonNode:ctor(part)
 end
 
 function SoundButtonNode:_changeImage()
-    local path = Sound.isPause() and "GuessTheIdiom/images/btn_sound_on.png" or "GuessTheIdiom/images/btn_sound_off.png"
+    local path = Sound.isPause() and "GuessTheIdiom/images/btn_sound_off.png" or "GuessTheIdiom/images/btn_sound_on.png"
     self.btn:loadTextureNormal(path)
 end
 return SoundButtonNode
