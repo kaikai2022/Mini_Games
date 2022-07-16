@@ -12,23 +12,25 @@ local function main()
     local time_seed = os.time()
     math.randomseed(time_seed)
 
-    --是否启用物理场景
-    local isPhysics = false
-    local scene = nil
-    if isPhysics then
-        scene = cc.Scene:createWithPhysics()
-    else
-        scene = cc.Scene:create()
-    end
-    --local layer = require("SuperBear.MainScene").new()   -- 竖版游戏
-    --local layer = require("JumpingTheGantry.MainScene").new()   -- 跳龙门
-    --local layer = require("PartyWheel.MainScene").new()   -- PartWheel
+    ----是否启用物理场景
+    --local isPhysics = true
+    --local scene = nil
+    --if isPhysics then
+    --    scene = cc.Scene:createWithPhysics()
+    --else
+    --    scene = cc.Scene:create()
+    --end
+    ----local layer = require("SuperBear.MainScene").new()   -- 竖版游戏
+    ----local layer = require("JumpingTheGantry.MainScene").new()   -- 跳龙门
+    ----local layer = require("PartyWheel.MainScene").new()   -- PartWheel
+    --
+    -- local layer = require("RunFromBlack.MainScene").new()   -- 横版游戏
+    ----local layer = require("GuessTheIdiom.MainScene").new()   -- 猜谜语
+    --scene:addChild(layer)
+    --
+    --display.runScene(scene)
+    display.runScene(require("MainRunScene").new())
 
-     --local layer = require("RunFromBlack.MainScene").new()   -- 横版游戏
-    local layer = require("GuessTheIdiom.MainScene").new()   -- 猜谜语
-    scene:addChild(layer)
-
-    display.runScene(scene)
     cc.Director:getInstance():setDisplayStats(true)
 
 

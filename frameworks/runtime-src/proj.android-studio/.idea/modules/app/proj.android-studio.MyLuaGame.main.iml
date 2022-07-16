@@ -19,10 +19,18 @@
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="true">
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../../cocos2d-x">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../cocos2d-x" type="native-Source-root" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../Classes">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../Classes" type="native-Source-root" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../app">
       <sourceFolder url="file://$MODULE_DIR$/../../../app/assets" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../app/jni" type="native-header-root" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../app/jni/hellolua" type="native-Source-root" />
       <excludeFolder url="file://$MODULE_DIR$/../../../app/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../app/build" />
       <excludeFolder url="file://$MODULE_DIR$/../../../app/.cxx" />

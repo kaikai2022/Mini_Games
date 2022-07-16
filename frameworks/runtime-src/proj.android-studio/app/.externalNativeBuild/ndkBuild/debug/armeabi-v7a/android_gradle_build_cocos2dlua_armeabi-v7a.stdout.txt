@@ -1,1 +1,0 @@
-make: `/Users/lucus/codes/proj_lua_lite-master/frameworks/runtime-src/proj.android-studio/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/libcocos2dlua.so' is up to date.
