@@ -7,7 +7,7 @@ function Sound.playBgMusic(isLoop)
         isLoop = true
     end
     engine:stopMusic()
-    engine:playMusic("JumpingTheGantry/Sound/bg.mp3", isLoop)
+    engine:playMusic("GuessTheIdiom/Sound/bg.mp3", isLoop)
 end
 
 function Sound.playGameFailedMusic()
@@ -20,6 +20,22 @@ function Sound.onClicked()
         return
     end
     Sound.playEffect("JumpingTheGantry/Sound/on_clicked.mp3")
+end
+
+---@public playCorrect 回答正确的声音
+function Sound.playCorrect()
+    if Sound.pauseFlag then
+        return
+    end
+    Sound.playEffect("GuessTheIdiom/Sound/correct.mp3")
+end
+
+---@public playWrong 回答错误的声音
+function Sound.playWrong()
+    if Sound.pauseFlag then
+        return
+    end
+    Sound.playEffect("GuessTheIdiom/Sound/wrong.mp3")
 end
 
 function Sound.playEffect(path)

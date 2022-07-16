@@ -12,6 +12,7 @@ local Characters = require("GuessTheIdiom.3000Characters")
 local InputButton = class("InputButton", function()
     return ccui.Layout:create()
 end)
+
 InputButton.lineMaxItemCount = 8
 InputButton.lineMaxItemPadding = 10
 function InputButton:ctor()
@@ -93,7 +94,7 @@ GameLayout.lineMaxInputCount = 4
 function GameLayout:ctor(parent)
     ---@private waiting_input_texts 等待输入的所有字
     self.waiting_input_texts = {}
-    self.nowInputIndex = GameLayout.lineMaxInputCount
+    self.nowInputIndex = 0
     self.inputButtons = {}
     self:setContentSize(display.width, display.height)
     self:setAnchorPoint(0.5, 0.5)
@@ -150,7 +151,7 @@ function GameLayout:ctor(parent)
                                      :move(inputNodeSize.width / 2, inputNodeSize.height / 2 - 20)
         local input_item_bg_size = input_item_bg:getContentSize()
         self.waiting_input_texts[i] = cc.Label:createWithTTF(
-                "我",
+                "",
                 "GuessTheIdiom/Fnt/STYuanti-SC-Bold.ttf",
                 80
         --cc.size(150, 0),
@@ -318,10 +319,12 @@ function GameLayout:_changeGameOver()
     if inputStr == self.idiom then
         self.overStateSprite:setTexture("GuessTheIdiom/images/Gaming/state_correct.png")
         cc.UserDefault:getInstance():setIntegerForKey(require("GuessTheIdiom.UserDefaultKey"), self.level)
+        Sound.playCorrect()
     else
         self.overStateSprite:setTexture("GuessTheIdiom/images/Gaming/state_wrong.png")
         self.nodeWrongNode:showNode(self.idiom)
         self.inputBtnNode:hide()
+        Sound.playWrong()
     end
     self.btn_next_level:show()
 end

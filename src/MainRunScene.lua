@@ -59,9 +59,12 @@ function MainRunScene:ctor()
                           :addTo(layer):move(display.cx, display.cy)
                           :setBackGroundColor(display.COLOR_RED)
                           :setBackGroundColorType(ccui.LayoutBackGroundColorType.solid) --设置颜色
-
+                          :setScrollBarEnabled(false)
     self.buttons = {}
     for index, game in ipairs(scenes) do
+        local panel = ccui.Layout:create()
+                          :setContentSize(400, 120)
+                          :addTo(scaleView)
         local button = ccui.Button:create()
                            :ignoreContentAdaptWithSize(false)
                            :loadTextureNormal("Default/Button_Normal.png", 0)
@@ -70,13 +73,16 @@ function MainRunScene:ctor()
                            :setScale9Enabled(true)
                            :setContentSize(300, 100)
                            :setAnchorPoint(0.5, 0.5)
-                           :addTo(scaleView)
+                           :addTo(panel)
                            :setTitleText(game.name)
                            :setTitleFontSize(50)
                            :setTitleColor(display.COLOR_BLACK)
+                           :move(200, 120 * 0.5)
         button:addClickEventListener(handler(self, self.runGame))
         self.buttons[button] = game
     end
+    scaleView:setInnerContainerSize(cc.size(400, #scenes * 120));--设置ScrollView容器大小，随着ScrollView容纳的控件越多，此值的设置值应该也变大
+
     scaleView:setLayoutType(ccui.LayoutType.VERTICAL)
 end
 function MainRunScene:runGame(sender)

@@ -17,6 +17,7 @@ function MiniGameController:ctor(mainNode)
     self.levelSelectionNode:setJoinGameCallback(handler(self, self.joinGame))
     self.levelSelectionNode:hide()
     self:initScene()
+    Sound.playBgMusic()
 end
 
 function MiniGameController:start()

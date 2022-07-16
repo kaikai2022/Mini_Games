@@ -55,7 +55,7 @@ function LevelPanel:ctor(parent, pageIndex)
                                :setAnchorPoint(cc.p(0.5, 0.5))
                                :addTo(buttonPanel)
                                :move(buttonPanelSize.width / 2, buttonPanelSize.height / 2)
-            local tag = panelIndex * iconIndex + (LevelPanel.lineMax * LevelPanel.lineItemCount * self.pageIndex)
+            local tag = (panelIndex - 1) * LevelPanel.lineItemCount + iconIndex + (LevelPanel.lineMax * LevelPanel.lineItemCount * self.pageIndex)
             button:setTag(tag)
             local buttonContentSize = button:getContentSize()
             LevelPanel.buttons[tag] = button
