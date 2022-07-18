@@ -8,6 +8,7 @@ local LevelPanel = class("LevelPanel", function()
     return ccui.Layout:create()
 end)
 local Sound = require("GuessTheIdiom.Sound")
+local IdiomConfig = require("GuessTheIdiom.IdiomConfig")
 
 LevelPanel.lineMax = 3
 LevelPanel.lineItemCount = 8
@@ -68,7 +69,11 @@ function LevelPanel:ctor(parent, pageIndex)
             leaveText:setString(tag)
             if (tag > 99) then
                 leaveText:setScale(0.7)
+                if (tag > #IdiomConfig) then
+                    buttonPanel:hide()
+                end
             end
+
             buttonPanel:setPosition(tag * (parentSize.width / LevelPanel.lineItemCount * LevelPanel.lineMax), panel:getContentSize().height / 2)
             local icon = display.newSprite("GuessTheIdiom/images/LevelSelection/not_player_icon.png")
                                 :setAnchorPoint(cc.p(0.5, 0.5))

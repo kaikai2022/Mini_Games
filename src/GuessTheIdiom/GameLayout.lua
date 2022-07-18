@@ -334,7 +334,6 @@ function GameLayout:_changeGameOver()
     print(inputStr)
     if inputStr == self.idiom then
         self.overStateSprite:setTexture("GuessTheIdiom/images/Gaming/state_correct.png")
-        cc.UserDefault:getInstance():setIntegerForKey(require("GuessTheIdiom.UserDefaultKey"), self.level)
         Sound.playCorrect()
     else
         self.overStateSprite:setTexture("GuessTheIdiom/images/Gaming/state_wrong.png")
@@ -342,7 +341,9 @@ function GameLayout:_changeGameOver()
         self.inputBtnNode:hide()
         Sound.playWrong()
     end
+    self.btn_next_level:setEnabled(self.level < #IdiomConfig)
     self.btn_next_level:show()
+    cc.UserDefault:getInstance():setIntegerForKey(require("GuessTheIdiom.UserDefaultKey"), self.level)
 end
 
 return GameLayout
