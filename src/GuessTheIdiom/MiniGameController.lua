@@ -73,6 +73,9 @@ end
 ---@private 进入游戏
 ---@param leave number 进入游戏的的游戏等级
 function MiniGameController:joinGame(leave)
+    if (cc.UserDefault:getInstance():getIntegerForKey(require("GuessTheIdiom.UserDefaultKey")) + 1 < leave) then
+        return
+    end
     print("进入游戏", leave)
     if not self.gameLayout then
         self.gameLayout = GameLayout:create(self.mainNode)
