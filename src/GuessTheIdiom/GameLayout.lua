@@ -233,6 +233,21 @@ function GameLayout:ctor(parent)
     self.nodeWrongNode = WrongNode:create()
                                   :addTo(self)
                                   :move(display.cx + 100, display.cy - 100)
+
+    local backButton = ccui.Button:create("GuessTheIdiom/images/btn_back.png")
+                           :setAnchorPoint(0, 0.5)
+                           :addTo(self)
+                           :move(80, display.height - 80)
+    backButton:addClickEventListener(function(sender)
+        Sound.onClicked()
+        if (self.backCallback) then
+            self.backCallback()
+        end
+    end)
+end
+
+function GameLayout:setBackCallback(callback)
+    self.backCallback = callback
 end
 
 ---@public init 初始化
@@ -294,6 +309,7 @@ function GameLayout:initGame(level)
     self.nodeWrongNode:hide()
     self.inputBtnNode:show()
     self:_updateState()
+    self:show()
 end
 
 ---@private _updateState 刷新状态

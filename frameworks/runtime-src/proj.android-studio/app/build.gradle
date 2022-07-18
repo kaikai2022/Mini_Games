@@ -4,6 +4,10 @@ android {
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
 
+    lintOptions {
+        abortOnError false
+    }
+    
     defaultConfig {
         applicationId "com.kai.minigame.yy"
         targetSdkVersion 32
@@ -47,7 +51,7 @@ android {
 
     signingConfigs {
 
-       release {
+        release {
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 storeFile file(RELEASE_STORE_FILE)
                 storePassword RELEASE_STORE_PASSWORD
@@ -93,6 +97,17 @@ android.applicationVariants.all { variant ->
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libcocos2dx')
+}
+
+def generateTime() {
+    return new Date().format("yyyy_MM_dd_HH_mm_ss")
+}
+
+// 自定义打包名称
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "My_APK_${buildType.name}_${generateTime()}.apk"
+    }
 }
 
 //clear{

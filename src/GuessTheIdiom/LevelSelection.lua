@@ -94,7 +94,22 @@ function LevelSelection:ctor(parent)
         end
     end)
 
+    local backButton = ccui.Button:create("GuessTheIdiom/images/btn_back.png")
+                           :setAnchorPoint(0, 0.5)
+                           :addTo(self)
+                           :move(-display.cx + 80, display.cy - 80)
+    backButton:addClickEventListener(function(sender)
+        Sound.onClicked()
+        if (self.backCallback) then
+            self.backCallback()
+        end
+    end)
 end
+
+function LevelSelection:setBackCallback(callback)
+    self.backCallback = callback
+end
+
 function LevelSelection:_Update(time)
     --print(time)
     if self.nowPageIndex and self.contentPageView and (self.nowPageIndex ~= self.contentPageView:getCurrentPageIndex()) then
