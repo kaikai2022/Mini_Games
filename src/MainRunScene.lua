@@ -39,6 +39,13 @@ local scenes = {
         isPhysics = true,
         layer = "RunFromBlack.MainScene"   -- 逃离黑洞
     },
+    
+    ---金刚大战
+    {
+        name = "金刚大战",
+        isPhysics = true,
+        layer = "KingKongWar.MainScene"
+    },
 
 }
 local MainRunScene = class("MainRunScene", function()
