@@ -35,7 +35,7 @@ function Sound.playGameFailedMusic()
     if Sound.pauseFlag then
         return
     end
-    engine:playMusic("KingKongWar/sound/game_over.flac")
+    engine:playMusic("KingKongWar/sound/game_over.mp3")
 end
 
 function Sound.onClicked()
@@ -49,7 +49,7 @@ function Sound.playBoom()
     if Sound.pauseFlag then
         return
     end
-    Sound.playEffect("KingKongWar/sound/boom.flac")
+    Sound.playEffect("KingKongWar/sound/boom.mp3")
 end
 
 function Sound.playEffect(path)

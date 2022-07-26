@@ -91,11 +91,12 @@ function PlayerNode:ctor(player, player_blood, callback)
             return
         end
         self.runTimerTextValue = self.runTimerTextValue - 1
-        if self.runTimerTextValue <= 0 and (self.runTimerTextCallback) then
-            self.runTimerText:hide()
-            self.runTimerTextCallback()
-        end
+        --if self.runTimerTextValue <= 0 and (self.runTimerTextCallback) then
+        --    self.runTimerText:hide()
+        --    self.runTimerTextCallback()
+        --end
         self.runTimerText:setString(self.runTimerTextValue)
+        self:_runDelayTime()
     end))
     local action = cc.RepeatForever:create(sequence)
     self:runAction(action)
@@ -170,6 +171,13 @@ function PlayerNode:ctor(player, player_blood, callback)
     --end, 1)
 
     --self:onTouchMoved()
+end
+
+function PlayerNode:_runDelayTime()
+    if self.runTimerTextValue <= 0 and (self.runTimerTextCallback) then
+        self.runTimerText:hide()
+        self.runTimerTextCallback()
+    end
 end
 
 ---@public 玩家
@@ -274,9 +282,10 @@ end
 ---@public throwBombs 投掷炸弹
 function PlayerNode:throwBombs()
     if self.playerArrowNode then
-        self.runTimerTextValue = 1
+        self.runTimerTextValue = 0
         NodeBanana.new(self.playerArrowNode, self)
         self.playerArrowNode = nil
+        self:_runDelayTime()
     end
     self.player_icon:setTexture(string.format("KingKongWar/images/gaming/icon_player%s.png", self.player))
 end
