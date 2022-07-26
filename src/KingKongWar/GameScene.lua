@@ -7,6 +7,8 @@
 local GameScene = class("GameScene", function()
     return cc.Scene:createWithPhysics()
 end)
+local SoundNode = require("KingKongWar.SoundButtonNode")
+local Sound = require("KingKongWar.Sound")
 
 local director = cc.Director:getInstance()
 
@@ -22,6 +24,10 @@ function GameScene:ctor(playerCount)
     ccui.ImageView:create("KingKongWar/images/bg.png")
         :setAnchorPoint(0, 0)
         :addTo(layer)
+
+    SoundNode.new()
+             :addTo(layer)
+             :move(200, display.height - 90)
 
     self.mainLayer = layer
     self.playerCount = playerCount or 1
@@ -126,11 +132,11 @@ function GameScene:initPhysicsWorld()
 
     -- 物理世界显示包围盒
     --self:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL) -- cc.PhysicsWorld. DEBUGDRAW_ALL 显示包围盒 cc.PhysicsWorld.DEBUGDRAW_NONE 不显示包围盒
-   
+
     local centerNode = cc.Node:create()
                          :addTo(self)
                          :move(display.cx, display.cy)
-    local centerBody = cc.PhysicsBody:createBox({width = 1,height = display.height})
+    local centerBody = cc.PhysicsBody:createBox({ width = 1, height = display.height })
     centerBody:setCollisionBitmask(0x02)
     centerBody:setDynamic(false)
     --centerBody:setPositionOffset(cc.p(display.cx, display.cy))
@@ -334,6 +340,7 @@ end
 
 function GameScene:onExit()
     print("GameScene onExit")
+    Sound.stopMove()
 end
 
 function GameScene:onExitTransitionStart()

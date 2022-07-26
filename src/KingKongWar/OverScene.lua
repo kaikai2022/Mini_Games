@@ -43,7 +43,8 @@ function OverScene:ctor(winPlayer)
         director:popToSceneStackLevel(1)
     end)
     director:pushScene(self)
-
+    Sound.playGameFailedMusic()
 end
+
 
 return OverScene

@@ -83,11 +83,19 @@ end
 function PlayerArrowNode:getValues()
     local value = PlayerArrowNode.minImageX / PlayerArrowNode.maxImageX * self.nowSize.width ---当前的力量 
     local rotate = self:getRotation()
-    local y = (math.abs(math.sin(math.abs(rotate))) * value) * (rotate < 0 and 1 or -1)
-    local x = math.abs(math.cos(math.abs(rotate))) * value
-    --print(y)
-    --print(x)
-    return { x = x, y = y }
+    if (rotate < 0) then
+        rotate = math.abs(rotate)
+        local x = math.cos(math.pi / 180 * rotate)
+        local y = math.sin(math.pi / 180 * rotate)
+        return cc.pMul({ x = x, y = y }, value)
+    elseif (rotate > 0) then
+        rotate = math.abs(rotate)
+        local x = math.cos(math.pi / 180 * rotate)
+        local y = -math.sin(math.pi / 180 * rotate)
+        return cc.pMul({ x = x, y = y }, value)
+    else
+        return cc.pMul({ x = 1, y = 0 }, value)
+    end
 end
 
 return PlayerArrowNode

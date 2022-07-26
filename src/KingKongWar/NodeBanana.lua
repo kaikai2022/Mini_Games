@@ -5,6 +5,8 @@
 ---
 
 local NodeBanana = class("NodeBanana", cc.Node)
+local Sound = require("KingKongWar.Sound")
+
 local speed = 10000
 
 function NodeBanana:ctor(playerArrowNode, parent)
@@ -28,8 +30,12 @@ function NodeBanana:ctor(playerArrowNode, parent)
     -- 设置球的刚体属性
     self:setPhysicsBody(body)   -- 设置球的刚体
     self:setPosition(nodePos)
-    --body:applyImpulse(cc.pMul(cc.p(value.x * (self.player.player ~= 1 and -1 or 1), value.y), speed))
-    body:applyImpulse(cc.p(value.x * (self.player.player ~= 1 and -1 or 1) * speed, value.y * speed * 1))
+    --dump(value)
+    --value = cc.pNormalize(value)
+    --dump(value)
+    body:applyImpulse(cc.pMul(cc.p(value.x * (self.player.player ~= 1 and -1 or 1), value.y), speed))
+    --body:setVelocity
+    --body:applyImpulse(cc.p(value.x * (self.player.player ~= 1 and -1 or 1) * speed, value.y * speed * 0.5))
     playerArrowNode:removeSelf()
 
     local contactListener = cc.EventListenerPhysicsContact:create()
@@ -51,6 +57,7 @@ function NodeBanana:removeNode(isBoom, callback)
                             :addTo(self)
         self:getPhysicsBody():removeFromWorld()
         boom:setScale(0, 0)
+        Sound.playBoom()
         boom:runAction(
                 cc.Sequence:create(
                         cc.ScaleTo:create(0.5, 1),

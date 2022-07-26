@@ -7,7 +7,7 @@ local SoundButtonNode = class("SoundButtonNode", function()
     return cc.Node:create()
 end)
 
-local Sound = require("GuessTheIdiom.Sound")
+local Sound = require("KingKongWar.Sound")
 
 local _allButtons = {}
 

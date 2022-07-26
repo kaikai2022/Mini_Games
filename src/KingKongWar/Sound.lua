@@ -2,17 +2,40 @@ local Sound = { pauseFlag = false }
 
 local engine = cc.SimpleAudioEngine:getInstance()
 
+local nowMoveEffect
 function Sound.playBgMusic(isLoop)
     if isLoop == nil then
         isLoop = true
     end
     engine:stopMusic()
-    engine:playMusic("GuessTheIdiom/Sound/bg.mp3", isLoop)
+    engine:playMusic("KingKongWar/sound/bg.wav", isLoop)
+end
+
+function Sound.playMove()
+    
+    if not nowMoveEffect then
+        if Sound.pauseFlag then
+            return
+        end
+        nowMoveEffect = engine:playEffect("KingKongWar/sound/monkey_move.wav", true)
+        print("开始播放移动声音")
+    end
+end
+
+function Sound.stopMove()
+    if nowMoveEffect then
+        print("停止播放移动声音")
+        engine:stopEffect(nowMoveEffect)
+        nowMoveEffect = nil
+    end
 end
 
 function Sound.playGameFailedMusic()
     engine:stopMusic()
-    engine:playMusic("JumpingTheGantry/Sound/on_clicked.mp3")
+    if Sound.pauseFlag then
+        return
+    end
+    engine:playMusic("KingKongWar/sound/game_over.flac")
 end
 
 function Sound.onClicked()
@@ -20,6 +43,13 @@ function Sound.onClicked()
         return
     end
     Sound.playEffect("JumpingTheGantry/Sound/on_clicked.mp3")
+end
+
+function Sound.playBoom()
+    if Sound.pauseFlag then
+        return
+    end
+    Sound.playEffect("KingKongWar/sound/boom.flac")
 end
 
 function Sound.playEffect(path)

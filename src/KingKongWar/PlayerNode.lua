@@ -8,6 +8,7 @@
 local PlayerNode = class("PlayerNode", function()
     return ccui.Layout:create()
 end)
+local Sound = require("KingKongWar.Sound")
 
 local NodeMap = require("KingKongWar.NodeMap")
 
@@ -200,10 +201,20 @@ function PlayerNode:iconMove(value)
     --self.player_icon:setPositionX(self.player_icon:getPositionX() + value)
     --self.player_icon:
     self.lf_rt = value
+    if (value ~= 0) then
+        Sound.playMove()
+    else
+        Sound.stopMove()
+    end
 end
 
 function PlayerNode:iconMoveUp(value)
     --self.player_icon_body:setVelocity({ x = 0, 1000000000 })
+    --if (value ~= 0) then
+    --    Sound.playMove()
+    --else
+    --    Sound.stopMove()
+    --end
     self.up = value
 end
 

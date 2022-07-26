@@ -35,8 +35,8 @@ function MainScene:ctor()
         :addClickEventListener(function()
         Sound.onClicked()
         GameScene:create(1)
-        local Tools= require("JumpingTheGantry.Tools")
-        print(Tools.And(0x06,0x03))
+        local Tools = require("JumpingTheGantry.Tools")
+        print(Tools.And(0x06, 0x03))
     end)
 
     ccui.Button:create("KingKongWar/images/startLayer/two_player_btn.png")
@@ -47,6 +47,17 @@ function MainScene:ctor()
         GameScene:create(2)
     end)
 
+    self:registerScriptHandler(function(eventType)
+        if eventType == "enterTransitionFinish" then
+            print("enterTransitionFinish")
+            Sound.playBgMusic()
+            -- 场景被加载完成
+        elseif eventType == "exitTransitionStart" then
+            -- 场景即将被移除
+            print("exitTransitionStart")
+        end
+        print(eventType, "popopop")
+    end)
 end
 
 return MainScene
