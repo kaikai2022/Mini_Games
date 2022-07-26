@@ -223,23 +223,6 @@ function GameScene:initUILayer()
         end
     end)
 
-    local player1_up_btn = ccui.Button:create("KingKongWar/images/gaming/btn_player1_right.png")
-                               :setAnchorPoint(0, 0.5)
-                               :addTo(player1TouchNode)
-                               :move(0, 35)
-                               :setRotation(-90)
-    player1_up_btn:addTouchEventListener(function(sender, event)
-        if event == 0 then
-            if self.player1 then
-                self.player1:iconMoveUp(playerMoveConfig)
-            end
-        elseif event == 2 then
-            if self.player1 then
-                self.player1:iconMoveUp(0)
-            end
-        end
-    end)
-
     local player2TouchNode = cc.Node:create()
                                :addTo(self.uiLayer)
                                :move(display.width - TouchNodeWidth, TouchNodeHeight)
@@ -278,22 +261,6 @@ function GameScene:initUILayer()
         end
     end)
 
-    local player2_up_btn = ccui.Button:create("KingKongWar/images/gaming/btn_player2_right.png")
-                               :setAnchorPoint(0, 0.5)
-                               :addTo(player2TouchNode)
-                               :move(0, 35)
-                               :setRotation(-90)
-    player2_up_btn:addTouchEventListener(function(sender, event)
-        if event == 0 then
-            if self.player2 then
-                self.player2:iconMoveUp(playerMoveConfig)
-            end
-        elseif event == 2 then
-            if self.player2 then
-                self.player2:iconMoveUp(0)
-            end
-        end
-    end)
     self:resetPlayerData()
 
 

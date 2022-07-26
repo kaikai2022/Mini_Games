@@ -216,19 +216,14 @@ function PlayerNode:iconMove(value)
     end
 end
 
-function PlayerNode:iconMoveUp(value)
-    --self.player_icon_body:setVelocity({ x = 0, 1000000000 })
-    --if (value ~= 0) then
-    --    Sound.playMove()
-    --else
-    --    Sound.stopMove()
-    --end
-    self.up = value
-end
-
 function PlayerNode:_moveUpdate(timer)
     if (self.lf_rt and self.lf_rt ~= 0) then
-        self.player_icon:setPositionX(self.player_icon:getPositionX() + self.lf_rt)
+        if self.nowPositionX ~= self.player_icon:getPositionX() then
+            print("没有移动")
+            self.up = 2
+        end
+        self.nowPositionX = self.player_icon:getPositionX() + self.lf_rt
+        self.player_icon:setPositionX(self.nowPositionX)
     end
     if (self.up and self.up ~= 0) then
         self.player_icon:getPhysicsBody():setGravityEnable(false)
@@ -236,6 +231,7 @@ function PlayerNode:_moveUpdate(timer)
     else
         self.player_icon:getPhysicsBody():setGravityEnable(true)
     end
+    self.up = 0
 end
 
 function PlayerNode:_TouchBegan(touch, event)

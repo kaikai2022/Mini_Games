@@ -53,7 +53,6 @@ function BotPlayer:_Update(timer)
             self.player:setTouchMovePosition(math.random(20, 81))
             isRuing = true
         end
-        self.player:iconMoveUp(math.abs(playerMoveConfig))
     else
         if not isRuing then
             runTime = math.random(0, 5)
@@ -77,7 +76,6 @@ function BotPlayer:_Update(timer)
             playerMoveConfig = 0
             self.player:throwBombs()
             self.player:iconMove(0)
-            self.player:iconMoveUp(0)
             self.player:setRunState(nil)
             isRuing = false
             if self.oldState.blood > nowState.blood then
