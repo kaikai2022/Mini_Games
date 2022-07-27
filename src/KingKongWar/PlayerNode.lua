@@ -218,10 +218,12 @@ end
 
 function PlayerNode:_moveUpdate(timer)
     if (self.lf_rt and self.lf_rt ~= 0) then
-        if self.nowPositionX ~= self.player_icon:getPositionX() then
+        local nowPositionX = self.player_icon:getPositionX()
+        if self.nowPositionX ~= nowPositionX and nowPositionX > self.player_icon_size.width / 2 and nowPositionX < self.width - self.player_icon_size.width / 2 then
             print("没有移动")
             self.up = 2
         end
+        print(self.player_icon:getPositionX())
         self.nowPositionX = self.player_icon:getPositionX() + self.lf_rt
         self.player_icon:setPositionX(self.nowPositionX)
     end
