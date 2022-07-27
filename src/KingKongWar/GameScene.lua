@@ -151,6 +151,18 @@ function GameScene:initPhysicsWorld()
     local mapBody = cc.PhysicsBody:createEdgeBox({ width = display.width, height = 0.5 }, cc.PHYSICSBODY_MATERIAL_DEFAULT, 2)
     self.mainLayer:setPhysicsBody(mapBody)
     mapBody:setPositionOffset(cc.p(display.cx, 45))
+
+    local groundNode = cc.Node:create()
+                         :addTo(self)
+                         :move(0, 0)
+                         :setTag(12)
+    local groundBody = cc.PhysicsBody:createBox({ width = display.width, height = 1 })
+    groundBody:setCollisionBitmask(0x10)
+    groundBody:setContactTestBitmask(0x01)
+    groundBody:setDynamic(false)
+    groundNode:setPhysicsBody(groundBody)
+    groundBody:setPositionOffset(cc.p(display.cx, 50))
+
 end
 
 function GameScene:initUILayer()

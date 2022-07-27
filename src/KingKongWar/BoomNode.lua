@@ -54,6 +54,7 @@ function BoomNode:ctor(parent)
         self:setPosition(0, 0)
     end, 0)
     self:addTo(parent)
+    --self.parent = parent
 end
 
 function BoomNode:onEnterTransitionFinish()
@@ -114,6 +115,8 @@ function BoomNode:onEnterTransitionFinish()
                                 end
                             end
                         end)
+                        self:getParent().player.runTimerTextValue = 0
+                        self:getParent().player:overSelfTimer()
                         self:getParent():removeSelf(true)
                     end)
             )

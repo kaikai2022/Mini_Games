@@ -96,7 +96,7 @@ function PlayerNode:ctor(player, player_blood, callback)
         --    self.runTimerTextCallback()
         --end
         self.runTimerText:setString(self.runTimerTextValue)
-        self:_runDelayTime()
+        self:overSelfTimer()
     end))
     local action = cc.RepeatForever:create(sequence)
     self:runAction(action)
@@ -135,21 +135,23 @@ function PlayerNode:ctor(player, player_blood, callback)
     self.listener = listener
     self:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, self);
 
-    self:registerScriptHandler(function(event)
-        if event == "enter" then
-            print("enter")
-        elseif event == "enterTransitionFinish" then
-            print("enterTransitionFinish")
+    --self:registerScriptHandler(function(event)
+    --    --if event == "enter" then
+    --    --    print("enter")
+    --    --elseif event == "enterTransitionFinish" then
+    --    --    print("enterTransitionFinish")
+    --    --
+    --    --elseif event == "exit" then
+    --    --    print("exit")
+    --    --
+    --    --elseif event == "exitTransitionStart" then
+    --    --    print("exitTransitionStart")
+    --    --elseif event == "cleanup" then
+    --    --    print("cleanup")
+    --    --end
+    --end)
 
-        elseif event == "exit" then
-            print("exit")
 
-        elseif event == "exitTransitionStart" then
-            print("exitTransitionStart")
-        elseif event == "cleanup" then
-            print("cleanup")
-        end
-    end)
     --self:addTouchEventListener
 
     --self:onTouch(function(event)
@@ -173,7 +175,9 @@ function PlayerNode:ctor(player, player_blood, callback)
     --self:onTouchMoved()
 end
 
-function PlayerNode:_runDelayTime()
+---@public PlayerNode.overSelfTimer 结束自己的投掷状态
+function PlayerNode:overSelfTimer()
+    print("popopopopopoiiioverSelfTimer")
     if self.runTimerTextValue <= 0 and (self.runTimerTextCallback) then
         self.runTimerText:hide()
         self.runTimerTextCallback()
@@ -263,11 +267,13 @@ end
 
 ---投掷香蕉炸弹时的开始位置Value
 function PlayerNode:setTouchStartPosition(value, distance)
-    self.player_icon:setTexture(string.format("KingKongWar/images/gaming/icon_player%s_read.png", self.player))
-    self.playerArrowNode = PlayerArrowNode.new(distance)
-    self.playerArrowNode:addTo(self.player_icon)
-        :move(self.player_icon_size.width + 10, self.player_icon_size.height / 2)
-    self.playerArrowNode:setStartTouchPosition(value)
+    if self.runTimerTextValue > 0 then
+        self.player_icon:setTexture(string.format("KingKongWar/images/gaming/icon_player%s_read.png", self.player))
+        self.playerArrowNode = PlayerArrowNode.new(distance)
+        self.playerArrowNode:addTo(self.player_icon)
+            :move(self.player_icon_size.width + 10, self.player_icon_size.height / 2)
+        self.playerArrowNode:setStartTouchPosition(value)
+    end
 end
 
 ---投掷香蕉炸弹时的移动位置Value
@@ -283,7 +289,7 @@ function PlayerNode:throwBombs()
         self.runTimerTextValue = 0
         NodeBanana.new(self.playerArrowNode, self)
         self.playerArrowNode = nil
-        self:_runDelayTime()
+        --self:overSelfTimer()
     end
     self.player_icon:setTexture(string.format("KingKongWar/images/gaming/icon_player%s.png", self.player))
 end

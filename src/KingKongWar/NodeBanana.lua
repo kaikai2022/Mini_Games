@@ -26,7 +26,7 @@ function NodeBanana:ctor(playerArrowNode, parent)
     -- 刚体
     local body = cc.PhysicsBody:createBox({ width = bananaSize.width, height = bananaSize.height / 2 }, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
     body:setCategoryBitmask(0x01) --00 00 01
-    body:setContactTestBitmask(0x06)
+    body:setContactTestBitmask(0x16)
     body:setCollisionBitmask(0x01)
     -- 设置球的刚体属性
     self:setPhysicsBody(body)   -- 设置球的刚体
@@ -69,7 +69,7 @@ function NodeBanana:removeNode()
     --local wordPos = self:convertToWorldSpace(cc.p(0, 0))
     --local nodePos = self:convertToNodeSpace(wordPos)
     BoomNode:create(self)
-            --:addTo(self)
+    --:addTo(self)
     --:setPosition(nodePos)
 
 end
@@ -92,7 +92,7 @@ function NodeBanana:onContactBegin(contact)
     local tagB = nodeB:getTag()
     local tagA = nodeA:getTag()
     --print(tagB, "碰撞了===", tagA)     --碰撞後的回調事件
-    if (tagA == 10) or tagA == 11 then
+    if (tagA == 10) or tagA == 11 or tagA == 12 then
         self:removeNode()
     end
     return false
