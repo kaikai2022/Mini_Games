@@ -88,7 +88,7 @@ function NodeMap:ctor(id)
             image:setPhysicsBody(body)
             body:setRotationEnable(false)
             body:setCategoryBitmask(0x04) --00 00 01 00
-            body:setContactTestBitmask(0x01)
+            body:setContactTestBitmask(0x09)
             body:setCollisionBitmask(0x07)
 
             image:setTag(11)

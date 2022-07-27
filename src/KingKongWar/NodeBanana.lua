@@ -5,12 +5,13 @@
 ---
 
 local NodeBanana = class("NodeBanana", cc.Node)
-local Sound = require("KingKongWar.Sound")
 
-local speed = 10000
+local BoomNode = require("KingKongWar.BoomNode")
+local speed = 1-- 500000
 
 function NodeBanana:ctor(playerArrowNode, parent)
     self:addTo(parent)
+    self._isShow = true
     self.player = parent
     local value = playerArrowNode:getValues()
     local wordPos = playerArrowNode:convertToWorldSpace(cc.p(0, 0))
@@ -26,7 +27,7 @@ function NodeBanana:ctor(playerArrowNode, parent)
     local body = cc.PhysicsBody:createBox({ width = bananaSize.width, height = bananaSize.height / 2 }, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
     body:setCategoryBitmask(0x01) --00 00 01
     body:setContactTestBitmask(0x06)
-    --body:setCollisionBitmask(0x01)
+    body:setCollisionBitmask(0x01)
     -- 设置球的刚体属性
     self:setPhysicsBody(body)   -- 设置球的刚体
     self:setPosition(nodePos)
@@ -42,42 +43,35 @@ function NodeBanana:ctor(playerArrowNode, parent)
     contactListener:registerScriptHandler(handler(self, self.onContactBegin), cc.Handler.EVENT_PHYSICS_CONTACT_BEGIN)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithFixedPriority(contactListener, 1)
+    --self:scheduleUpdateWithPriorityLua(function()
+    --    dump(self:getPosition())
+    --
+    --end, 0)
 
     --cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
     --    --self:removeNode(false)
     --    print("opoppopopo")
-    --end, 5, false)
+    --    dump(self:getPosition())
+    --end)
 end
 
-function NodeBanana:removeNode(isBoom, callback)
-    self:removeAllChildren()
-    if isBoom then
-        --self:setPhysicsBody(body)
-        local boom = display.newSprite('KingKongWar/images/gaming/icon_boom.png')
-                            :addTo(self)
-        self:getPhysicsBody():removeFromWorld()
-        boom:setScale(0, 0)
-        Sound.playBoom()
-        boom:runAction(
-                cc.Sequence:create(
-                        cc.ScaleTo:create(0.5, 1),
-                        cc.CallFunc:create(function()
-                            if callback then
-                                pcall(
-                                        callback
-                                )
-                            end
-                        end),
-                        cc.ScaleTo:create(0.5, 1.5),
-                        cc.CallFunc:create(function()
-                            boom:removeSelf()
-                        end)
-
-                )
-        )
-    else
-        self:removeSelf()
+function NodeBanana:removeNode()
+    if not self._isShow then
+        return
     end
+    self._isShow = false
+    --self:removeAllChildren()
+    --display.newSprite('KingKongWar/images/gaming/icon_boom.png')
+    --       :setAnchorPoint(0.5, 0.5)
+    --       :addTo(self)
+    self:getPhysicsBody():setEnabled(false)
+    self:getPhysicsBody():removeFromWorld()
+    --local wordPos = self:convertToWorldSpace(cc.p(0, 0))
+    --local nodePos = self:convertToNodeSpace(wordPos)
+    BoomNode:create(self)
+            --:addTo(self)
+    --:setPosition(nodePos)
+
 end
 
 function NodeBanana:onContactBegin(contact)
@@ -97,25 +91,9 @@ function NodeBanana:onContactBegin(contact)
     --print("popop")
     local tagB = nodeB:getTag()
     local tagA = nodeA:getTag()
-    print(tagB, "碰撞了===", tagA)     --碰撞後的回調事件
+    --print(tagB, "碰撞了===", tagA)     --碰撞後的回調事件
     if (tagA == 10) or tagA == 11 then
-        if self and self:isVisible() then
-            self:removeNode(true, function()
-                if tagA == 11 then
-                    --墙壁
-                    nodeA:removeSelf()
-                elseif tagA == 10 then
-                    --玩家
-                    pcall(
-                            function()
-                                nodeA:getParent().player_blood:setValue(nodeA:getParent().player_blood.value - 1)
-                            end
-                    )
-                end
-            end)
-
-        end
-
+        self:removeNode()
     end
     return false
 end

@@ -57,7 +57,7 @@ function PlayerNode:ctor(player, player_blood, callback)
     player_icon:setPhysicsBody(player_icon_body)
     player_icon_body:setRotationEnable(false)
     player_icon_body:setCategoryBitmask(0x02) --00 00 10 group
-    player_icon_body:setContactTestBitmask(0x01)
+    player_icon_body:setContactTestBitmask(0x09)
 
     --player_icon_body:setContactTestBitmask(0x02)
     --player_icon_body:setVelocity({ x = 10, 0 })

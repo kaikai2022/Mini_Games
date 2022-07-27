@@ -81,7 +81,11 @@ function PlayerArrowNode:setTouchPosition(posY)
 end
 
 function PlayerArrowNode:getValues()
-    local value = PlayerArrowNode.minImageX / PlayerArrowNode.maxImageX * self.nowSize.width ---当前的力量 
+    --local value = (PlayerArrowNode.minImageX / PlayerArrowNode.maxImageX) * (self.image:getContentSize().width - PlayerArrowNode.minImageX) -- * 1000000
+    local value = (self.nowSize.width - PlayerArrowNode.minImageX) / (PlayerArrowNode.maxImageX - PlayerArrowNode.minImageX)
+    value = value < 0.1 and 0 or value
+    print(value, "0909009")
+    value = value * 500000
     local rotate = self:getRotation()
     if (rotate < 0) then
         rotate = math.abs(rotate)
