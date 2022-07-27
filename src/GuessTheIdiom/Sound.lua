@@ -12,14 +12,14 @@ end
 
 function Sound.playGameFailedMusic()
     engine:stopMusic()
-    engine:playMusic("JumpingTheGantry/Sound/on_clicked.mp3")
+    engine:playMusic("GuessTheIdiom/Sound/on_clicked.mp3")
 end
 
 function Sound.onClicked()
     if Sound.pauseFlag then
         return
     end
-    Sound.playEffect("JumpingTheGantry/Sound/on_clicked.mp3")
+    Sound.playEffect("GuessTheIdiom/Sound/on_clicked.mp3")
 end
 
 ---@public playCorrect 回答正确的声音

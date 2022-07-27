@@ -42,7 +42,7 @@ function Sound.onClicked()
     if Sound.pauseFlag then
         return
     end
-    Sound.playEffect("JumpingTheGantry/Sound/on_clicked.mp3")
+    Sound.playEffect("KingKongWar/sound/on_clicked.mp3")
 end
 
 function Sound.playBoom()
