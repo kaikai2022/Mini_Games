@@ -80,15 +80,23 @@ android.applicationVariants.all { variant ->
     delete dest_assets_folder
     def targetName = variant.name.capitalize()
     def copyTaskName = "copy${targetName}ResourcesToAssets"
-
+    print "cocos luacompile -s ../../../src -d ../../../src_luac -e -k 2dxLua -b XXTEA --disable-compile".execute().text.trim()
     tasks.register(copyTaskName) {
         copy {
             from project_root_folder + "/res"
             into dest_assets_folder + "/res"
         }
-        copy {
-            from project_root_folder + "/src"
-            into dest_assets_folder + "/src"
+        if(file(project_root_folder + "/src_luac").exists()){
+            copy {
+                from project_root_folder + "/src_luac"
+                into dest_assets_folder + "/src"
+            }
+        }else {
+            print("没有对应的luac 复制源码到src")
+            copy {
+                from project_root_folder + "/src"
+                into dest_assets_folder + "/src"
+            }
         }
     }
     tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
