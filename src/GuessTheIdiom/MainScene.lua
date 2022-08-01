@@ -4,6 +4,7 @@ end)
 local MiniGameController = require("GuessTheIdiom.MiniGameController")
 ---@public MainScene.NowLeave int 当前的等级
 function MainScene:ctor()
+
     local rotateNode = cc.Node:create()
     rotateNode:addTo(self)
     rotateNode:setContentSize(cc.size(display.width, display.height))
@@ -30,7 +31,7 @@ function MainScene:onKeyboard(code, event)
             --Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mExitTime = os.time();-- 更新mExitTime
             print("再按一次退出程序")
-            
+
         else
             cc.Director:getInstance():endToLua()
         end

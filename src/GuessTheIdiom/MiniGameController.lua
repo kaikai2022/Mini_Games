@@ -56,7 +56,7 @@ function MiniGameController:initScene()
 
     ButtonSound:create(self.mainNode)
                :setAnchorPoint(cc.p(1, 1))
-               :setPosition(display.width - 100, display.height - 100)
+               :setPosition(display.width - 100 * display.width / CC_DESIGN_RESOLUTION.width, display.height - 100 * display.height / CC_DESIGN_RESOLUTION.height)
 end
 
 ---@private onClickedLevelSelectionBack 等级界面的返回按钮

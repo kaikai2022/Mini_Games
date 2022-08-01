@@ -16,12 +16,15 @@ end)
 InputButton.lineMaxItemCount = 8
 InputButton.lineMaxItemPadding = 10
 function InputButton:ctor()
+    self:setScale(display.width / CC_DESIGN_RESOLUTION.width)
+    --self:setBackGroundColor(display.COLOR_RED)
+    --self:setBackGroundColorType(ccui.LayoutBackGroundColorType.solid) --设置颜色
     self.button = ccui.Button:create("GuessTheIdiom/images/Gaming/btn_bg.png")
                       :setAnchorPoint(cc.p(0.5, 0.5))
                       :addTo(self)
     local buttonSize = self.button:getContentSize()
-    self.width = buttonSize.width + InputButton.lineMaxItemPadding
-    self.height = buttonSize.height + InputButton.lineMaxItemPadding
+    self.width = buttonSize.width * display.width / CC_DESIGN_RESOLUTION.width + InputButton.lineMaxItemPadding
+    self.height = buttonSize.height * display.width / CC_DESIGN_RESOLUTION.width + InputButton.lineMaxItemPadding
     self:setContentSize(self.width, self.height)
     self.button:move(self.width / 2, self.height / 2)
     self.text = cc.Label:createWithTTF(
@@ -65,7 +68,10 @@ end)
 function WrongNode:ctor()
     display.newSprite("GuessTheIdiom/images/Gaming/wrong_title.png")
            :setAnchorPoint(cc.p(0.5, 0))
-           :addTo(self):move(0, 15)
+           :setScale(display.width / CC_DESIGN_RESOLUTION.width)
+           :addTo(self)
+           :move(0, -10 * display.width / CC_DESIGN_RESOLUTION.width)
+
     local wrong_bg = display.newSprite("GuessTheIdiom/images/Gaming/correct_input_bg.png")
                             :setAnchorPoint(cc.p(0.5, 1))
                             :addTo(self):move(0, -15)
@@ -113,7 +119,9 @@ function GameLayout:ctor(parent)
     local idiomBg = display.newSprite("GuessTheIdiom/images/Gaming/show_idiom_image_bg.png")
                            :setAnchorPoint(cc.p(0, 0.5))
                            :addTo(self)
-                           :move(30, display.cy)
+                           :move(30 * display.width / CC_DESIGN_RESOLUTION.width, display.cy)
+                           :setScale(display.width / CC_DESIGN_RESOLUTION.width)
+
     local idiomBgSize = idiomBg:getContentSize()
     self.idiomSprite = ccui.ImageView:create("GuessTheIdiom/images/IdiomImages/1.png")
                            :ignoreContentAdaptWithSize(false)
@@ -121,16 +129,16 @@ function GameLayout:ctor(parent)
                            :setAnchorPoint(cc.p(0.5, 0.5))
                            :addTo(idiomBg)
                            :move(idiomBgSize.width / 2, idiomBgSize.height / 2)
-
     local waiting_inputsNode = cc.Node:create()
                                  :addTo(self)
-
+                                 :setScale(display.width / CC_DESIGN_RESOLUTION.width)
+                                 :setAnchorPoint(1, 0.5)
     local waiting_bg = display.newSprite("GuessTheIdiom/images/Gaming/waiting_all_input_bg.png")
                               :setAnchorPoint(cc.p(0.5, 0.5))
                               :addTo(waiting_inputsNode)
                               :move(0, 0)
     local waiting_bg_size = waiting_bg:getContentSize()
-    waiting_inputsNode:move(display.cx + 150, display.cy + 150)
+    waiting_inputsNode:move(display.width - (600 * (display.width / CC_DESIGN_RESOLUTION.width)), display.height - 300 * display.height / CC_DESIGN_RESOLUTION.height)
 
     local inputBg = ccui.Layout:create()
     --:setBackGroundColor(display.COLOR_BLACK)
@@ -182,6 +190,7 @@ function GameLayout:ctor(parent)
                               :setAnchorPoint(cc.p(1, 0.5))
                               :addTo(self)
                               :move(display.width - 60, 100)
+                              :setScale(display.width / CC_DESIGN_RESOLUTION.width)
     self.btn_next_level:addClickEventListener(function(sender)
         Sound.onClicked()
         self:initGame(self.level + 1)
@@ -195,16 +204,16 @@ function GameLayout:ctor(parent)
 
     local button = InputButton:create()
     local showAllPanel = ccui.Layout:create()
-                             :setAnchorPoint(cc.p(0, 0.5))
+                             :setAnchorPoint(cc.p(1, 0.5))
                              :setContentSize(button.width * InputButton.lineMaxItemCount, button.height * 2)
                              :addTo(self)
-                             :move(display.cx - 300, display.cy - 100)
+                             :move(display.width - 100 * display.width / CC_DESIGN_RESOLUTION.width, 200 * display.height / CC_DESIGN_RESOLUTION.height)
     ---@private inputBtnNode 所有的字的主node
     self.inputBtnNode = showAllPanel
     --local colors = { display.COLOR_RED, display.COLOR_BLUE }
     for line = 1, 2 do
         local temp_layout = ccui.Layout:create()
-                                :setAnchorPoint(cc.p(0, 0.5))
+                                :setAnchorPoint(cc.p(0, 0))
                                 :setContentSize(button.width * InputButton.lineMaxItemCount, button.height)
                                 :addTo(showAllPanel)
         --:setBackGroundColor(colors[line])
