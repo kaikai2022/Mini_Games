@@ -27,7 +27,7 @@ function GameScene:ctor(playerCount)
 
     SoundNode.new()
              :addTo(layer)
-             :move(200, display.height - 90)
+             :move(200 * (display.width / CC_DESIGN_RESOLUTION.width), display.height - 90)
 
     self.mainLayer = layer
     self.playerCount = playerCount or 1
@@ -177,6 +177,7 @@ function GameScene:initUILayer()
     local node_blood_bar = cc.Node:create()
                              :addTo(self.uiLayer)
                              :move(display.cx, display.height - 100)
+                             :setScale(display.width / CC_DESIGN_RESOLUTION.width)
     vsSprite:addTo(node_blood_bar)
             :setLocalZOrder(10)
 

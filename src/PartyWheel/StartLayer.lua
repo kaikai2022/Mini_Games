@@ -18,10 +18,13 @@ function StartLayer:ctor(parent, onPlayGame)
 
     local logo = display.newSprite("PartyWheel/image/logo.png")
     logo:addTo(self.mainNode)
+        :setScale(display.width / CC_DESIGN_RESOLUTION.width)
     --logo:move(display.realCx, display.realCy + 180)
 
     local startBtn = ccui.Button:create("PartyWheel/image/btn_start_game.png")
                          :setAnchorPoint(cc.p(0.5, 0.5))
+                         :setScale(display.width / CC_DESIGN_RESOLUTION.width)
+
     startBtn:addTo(self.mainNode)
     startBtn:move(cc.p(0, -logo:getContentSize().height / 2 - 150))
 

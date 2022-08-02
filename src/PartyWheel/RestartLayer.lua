@@ -20,19 +20,26 @@ function RestartLayer:ctor(parent, onPlayGame, cbHome)
 
     local titleBg = cc.Sprite:create("PartyWheel/image/over_bg.png")
                       :addTo(self)
+                      :setScale(display.width / CC_DESIGN_RESOLUTION.width)
+
     local titleContentSize = titleBg:getContentSize()
     cc.Sprite:create("PartyWheel/image/over_title.png")
       :setAnchorPoint(cc.p(0.5, 0.5))
       :addTo(titleBg)
       :setPosition(cc.p(titleContentSize.height / 2, titleContentSize.width))
+      :setScale(display.width / CC_DESIGN_RESOLUTION.width)
+
     self.contentSprite = cc.Sprite:create("PartyWheel/image/overType/gongbei.png")
                            :setAnchorPoint(cc.p(0.5, 0.5))
                            :addTo(titleBg)
                            :setPosition(cc.p(titleContentSize.height / 2, titleContentSize.width / 2))
+                           :setScale(display.width / CC_DESIGN_RESOLUTION.width)
 
     ccui.Button:create("PartyWheel/image/btn_resetGame.png")
         :setAnchorPoint(cc.p(0.5, 0.5))
         :addTo(self)
+        :setScale(display.width / CC_DESIGN_RESOLUTION.width)
+
         :move(cc.p(0, -(titleContentSize.width / 2 + 150)))
         :addClickEventListener(function(sender)
         if (onPlayGame) then

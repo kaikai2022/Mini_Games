@@ -12,6 +12,7 @@ local Sound = require("KingKongWar.Sound")
 local _allButtons = {}
 
 function SoundButtonNode:ctor(part)
+    self:setScale((display.width / CC_DESIGN_RESOLUTION.width))
     table.insert(_allButtons, self)
     if (part) then
         self:addTo(part)

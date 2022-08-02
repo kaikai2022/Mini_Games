@@ -21,22 +21,27 @@ function OverScene:ctor(winPlayer)
         :ignoreContentAdaptWithSize(false)
         :setAnchorPoint(0, 0)
         :addTo(self.layout)
+    --:setScale((display.width / CC_DESIGN_RESOLUTION.width))
     SoundNode.new()
              :addTo(self.layout)
-             :move(200, display.height - 90)
+             :move(200 * (display.width / CC_DESIGN_RESOLUTION.width)
+    , display.height - 90)
     ccui.ImageView:create(string.format("KingKongWar/images/over/icon_player%s.png", winPlayer))
         :ignoreContentAdaptWithSize(false)
         :addTo(self.layout)
         :move(400, 350)
+        :setScale((display.width / CC_DESIGN_RESOLUTION.width))
 
     ccui.ImageView:create(string.format("KingKongWar/images/over/title_player%s.png", winPlayer))
         :ignoreContentAdaptWithSize(false)
         :addTo(self.layout)
         :move(display.width - 300, display.height - 300)
+        :setScale((display.width / CC_DESIGN_RESOLUTION.width))
 
     local button = ccui.Button:create("KingKongWar/images/over/btn_reset.png")
                        :addTo(self.layout)
                        :move(display.width - 300, 160)
+                       :setScale((display.width / CC_DESIGN_RESOLUTION.width))
 
     button:addClickEventListener(function()
         Sound.onClicked()
@@ -45,6 +50,5 @@ function OverScene:ctor(winPlayer)
     director:pushScene(self)
     Sound.playGameFailedMusic()
 end
-
 
 return OverScene
