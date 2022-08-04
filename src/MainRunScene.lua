@@ -5,6 +5,14 @@
 ---
 
 local scenes = {
+
+    --- 软软水果糖
+    {
+        name = "软软水果糖",
+        isPhysics = false,
+        layer = "SoftFudgeCandy.MainScene"
+    },
+    
     --- 跳跳熊
     {
         name = "跳跳熊",
@@ -98,7 +106,6 @@ function MainRunScene:runGame(sender)
     local scene = nil
     if game.isPhysics then
         scene = cc.Scene:createWithPhysics()
-        print("启动了")
     else
         scene = cc.Scene:create()
     end

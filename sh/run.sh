@@ -18,10 +18,10 @@ DISBABLE_LOAD_FRAMEWORK="-disable-load-framework"
 #横屏
 # RESOLUTION="600x400" # iphone 4/4s
 # RESOLUTION="350x300" # iphone 4/4s
-# RESOLUTION="960x640" # iphone 4/4s
+ RESOLUTION="960x640" # iphone 4/4s
 # RESOLUTION="1136x640" # iphone 5 5s
-#RESOLUTION="852x480" # 适合分屏
- RESOLUTION="1624x750" # 适合分屏
+# RESOLUTION="852x480" # 适合分屏
+# RESOLUTION="1624x750" # 适合分屏
 # RESOLUTION="680x388" # 适合mbp分屏
 # RESOLUTION="800x480" # Samsung Nexus S
 # RESOLUTION="1280x800" # Samsung Galaxy Note
