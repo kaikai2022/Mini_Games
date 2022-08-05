@@ -4,10 +4,12 @@
 --- DateTime: 4/8/2022 4:38 PM
 ---
 
+local scale_width = display.width / CC_DESIGN_RESOLUTION.width
+
 local CandyNode = class("CandyNode", cc.Node)
 ---@private MaxId 最大的糖果等级
 CandyNode.MaxId = 11
-local MATERIAL_DEFAULT = cc.PhysicsMaterial(100, 0, 0.5)                      -- 密度、碰撞系数、摩擦力
+local MATERIAL_DEFAULT = cc.PhysicsMaterial(1, 0, 0.5)                      -- 密度、碰撞系数、摩擦力
 function CandyNode.setParent(parent)
     CandyNode.parent = parent
 end
@@ -64,8 +66,8 @@ function CandyNode:ctor(id)
     self:init(id)
     if (CandyNode.parent) then
         self:addTo(CandyNode.parent)
-            :move(math.random(160, display.realWidth - 160),
-                math.random(display.realHeight - 10, display.realHeight - 75)
+            :move(display.realWidth / 2 + math.random(-100 * scale_width, 100 * scale_width),
+                math.random(display.realHeight - 50, display.realHeight - 150)
         )
     end
     self:addClickEventListener(function()

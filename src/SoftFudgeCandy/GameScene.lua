@@ -126,9 +126,9 @@ function GameScene:InitPhysicsWord()
     self:getPhysicsWorld():setGravity(gravity)
 
     local edgeBox = cc.PhysicsBody:createEdgeBox({
-        width = display.realWidth - 90 * 2, height = display.realHeight,
+        width = display.realWidth - 90 * 2, height = display.realHeight + 200,
     }, cc.PHYSICSBODY_MATERIAL_DEFAULT, 2)
-    edgeBox:setPositionOffset(cc.p(-75, 0))
+    edgeBox:setPositionOffset(cc.p(-75 - 200 / 2, 0))
     self.bg:setPhysicsBody(edgeBox)
 
     local tempEdgeBox = cc.PhysicsShapeEdgeBox:create({
