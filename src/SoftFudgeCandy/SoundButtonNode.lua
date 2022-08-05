@@ -44,10 +44,27 @@ function SoundButtonNode:ctor(part)
     end)
     self.btn = soundBtn
     self:_changeImage()
+    self:addNodeEvent()
 end
 
 function SoundButtonNode:_changeImage()
     local path = Sound.isPause() and "SoftFudgeCandy/images/start/btn_sound_off.png" or "SoftFudgeCandy/images/start/btn_sound_on.png"
     self.btn:loadTextureNormal(path)
+end
+
+function SoundButtonNode:addNodeEvent()
+    --场景节点事件处理
+    local function onNodeEvent(event)
+        if event == "cleanup" then
+            print("cleanup")
+            for index, v in pairs(_allButtons) do
+                if v == self then
+                    table.remove(_allButtons, index)
+                    return
+                end
+            end
+        end
+    end
+    self:registerScriptHandler(onNodeEvent)
 end
 return SoundButtonNode

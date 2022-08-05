@@ -7,9 +7,10 @@
 local GameScene = class("GameScene", function()
     return cc.Scene:createWithPhysics()
 end)
+local scale_value = display.width / CC_DESIGN_RESOLUTION.width
+local SoundButtonNode = require("SoftFudgeCandy.SoundButtonNode")
 
 local CandyNode = require("SoftFudgeCandy.CandyNode")
-local newCandyNode
 function GameScene:ctor()
     local rotateNode = cc.Node:create()
     rotateNode:addTo(self)
@@ -27,7 +28,42 @@ function GameScene:ctor()
                   :addTo(self.rotateNode)
                   :move(display.realCx, display.realCy)
 
+    self.candyNodes = cc.Node:create()
+                        :addTo(self.bg)
+    local scoreBg = display.newSprite("SoftFudgeCandy/images/game/score_bg.png")
+                           :setScale(scale_value)
+                           :addTo(self.bg)
+                           :move(display.realCx, display.realHeight - 120 * (display.height / CC_DESIGN_RESOLUTION.height))
+
+    --local scoreText = ccui.TextBMFont:create()
+    --                      :setAnchorPoint(0, 0.5)
+    --                      :addTo(scoreBg)
+    --                      :setPosition(cc.p(160, 40))
+    --                      :setScale(scale_value)
+    --scoreText:setFntFile("SoftFudgeCandy/images/game/score_text.fnt")
+    --scoreText:setString(0)
+    --self.scoreText = scoreText
+
+    local scoreText = cc.Label:createWithTTF("0", "SoftFudgeCandy/images/game/score_text.ttf", 30)
+                        :setAnchorPoint(0, 0.5)
+                        :addTo(scoreBg)
+                        :setPosition(cc.p(160, 33))
+    scoreText:setTextColor(cc.c3b(0xf7, 0x9d, 0xff))
+    self.scoreText = scoreText
+
+    SoundButtonNode:create()
+                   :addTo(scoreBg)
+    --:setScale(scale_value)
+                   :move(-65 * scale_value, 43 * scale_value)
+
     self:InitPhysicsWord()
+
+    ccui.Button:create("SoftFudgeCandy/images/game/score_bg.png")
+        :addTo(self.bg)
+        :addClickEventListener(function()
+        --self:removeCandyNode({ id = 12 })
+        self:gameOver()
+    end)
 
     --newCandyNode = function()
     --    CandyNode:create()
@@ -45,6 +81,41 @@ function GameScene:ctor()
     --self:TestPhysics()
     --self:TestPhysics()
     --self:TestPhysics()
+
+    self.removeTimer = 0
+    self.changeIsOverHandle = cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
+        print("检测游戏是否结束")
+        local children = self.candyNodes:getChildren()
+        for _, candyNode in ipairs(children) do
+            local body = candyNode:getPhysicsBody()
+            if body and body:getVelocity().x > 10 then
+                print("有在运动的")
+                return
+            end
+        end
+
+        for _, candyNode in ipairs(children) do
+            local temp = {}
+            temp = candyNode:getAllCandyNodes(temp)
+            if #temp > 1 then
+                print("有挨着一样的")
+                self.removeTimer = self.removeTimer + 1
+                if self.removeTimer >= 3 then
+                    for _, node in pairs(temp) do
+                        node:runAction(cc.Sequence:create(
+                                cc.FadeTo:create(0.5, 255 * 0.7),
+                                cc.FadeTo:create(0.5, 255),
+                                cc.FadeTo:create(0.5, 255 * 0.7),
+                                cc.FadeTo:create(0.5, 255)
+                        ))
+                    end
+                end
+                return
+            end
+        end
+        self:gameOver()
+    end, 5, false)
+
 end
 
 ---@private 初始化物理世界
@@ -67,7 +138,7 @@ function GameScene:InitPhysicsWord()
     tempEdgeBox:setTag(2)
     edgeBox:addShape(tempEdgeBox)
 
-    CandyNode.setParent(self.bg)
+    CandyNode.setParent(self.candyNodes)
     for index = 0, 50 do
         CandyNode:create()
     end
@@ -81,7 +152,7 @@ function GameScene:InitPhysicsWord()
         return handle
     end
     delayDoSomething(function()
-        edgeBox:removeShape(2,true)
+        edgeBox:removeShape(2, true)
     end, 0.2)
 end
 
@@ -148,6 +219,52 @@ function GameScene:TestPhysics()
     touchListener:registerScriptHandler(onTouchEnded, cc.Handler.EVENT_TOUCH_ENDED)
     local eventDispatcher = self.bg:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, self.bg)
+end
+
+---@public removeCandyNode 合并删除的node
+function GameScene:removeCandyNode(candyNode)
+    print(candyNode.id, "removeCandyNode")
+    self.removeTimer = 0
+    if candyNode.id < CandyNode.MaxId then
+        local value = (self.scoreText.number or 0) + math.pow(2, candyNode.id)
+        self.scoreText:setString(value)
+        self.scoreText.number = value
+        CandyNode:create()
+    else
+        ---爆炸
+        local value = (self.scoreText.number or 0) + 2048
+        self.scoreText:setString(value)
+        self.scoreText.number = value
+        for k, node in ipairs(self.candyNodes:getChildren()) do
+            node:removeSelf()
+        end
+        local boom = display.newSprite("SoftFudgeCandy/images/game/boom.png")
+                            :addTo(self.rotateNode)
+                            :setScale(0)
+                            :move(display.realCx, display.realCy + 150 * scale_value)
+        boom:runAction(
+                cc.Sequence:create(
+                        cc.ScaleTo:create(2, 1.3),
+                        cc.CallFunc:create(function()
+                            for index = 0, 50 do
+                                CandyNode:create()
+                            end
+                        end),
+                        cc.ScaleTo:create(1, 0.2),
+                        cc.CallFunc:create(handler(boom, boom.removeSelf))
+                )
+        )
+    end
+end
+
+---@public gameOver 结束游戏
+function GameScene:gameOver()
+    if (self.changeIsOverHandle) then
+        cc.Director:getInstance():getScheduler():unscheduleScriptEntry(self.changeIsOverHandle)
+        self.changeIsOverHandle = nil
+    end
+    cc.Director:getInstance():replaceScene(require("SoftFudgeCandy.OverScene"):create(self.scoreText.number))
+    print("结束游戏")
 end
 
 return GameScene
