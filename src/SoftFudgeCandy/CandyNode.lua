@@ -346,7 +346,20 @@ end
 function CandyNode:score()
     print("开始加分 且删除自己")
     cc.Director:getInstance():getRunningScene():removeCandyNode(self)
-    delayDoSomething(handler(self, self.removeSelf), 0.2)
+    --delayDoSomething(handler(self, self.removeSelf), 0.2)
+    --self:runAction(cc.Sequence:create(
+    --        cc.CallFunc:create(function()
+    --            self.sprite:setEnabled(false)
+    --            self.imagePath = string.format("SoftFudgeCandy/images/game/merging/%s.png", self.id)
+    --            self.sprite:loadTextures(self.imagePath, self.imagePath, self.imagePath)
+    --        end),
+    ----cc.MoveTo:create(0.5, cc.p(self:getPositionX(), self:getPositionY())),
+    --        cc.DelayTime:create(0.5),
+    --        cc.CallFunc:create(function()
+    --            self.sprite:setEnabled(true)
+    --        end)
+    --))
+    self:removeSelf(true)
 end
 
 function CandyNode:addNodeEvent()

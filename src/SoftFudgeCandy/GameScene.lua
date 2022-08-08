@@ -127,7 +127,7 @@ end
 function GameScene:InitPhysicsWord()
     --self:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL) -- cc.PhysicsWorld. DEBUGDRAW_ALL 显示包围盒 cc.PhysicsWorld.DEBUGDRAW_NONE 不显示包围盒
 
-    local gravity = cc.p(98, 0)
+    local gravity = cc.p(980, 0)
     self:getPhysicsWorld():setGravity(gravity)
 
     local edgeBox = cc.PhysicsBody:createEdgeBox({
