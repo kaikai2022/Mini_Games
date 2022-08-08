@@ -78,7 +78,7 @@ function CandyNode:ctor(id)
     end)
     self.createPosY = self:getPositionY()
     self:runAction(cc.Sequence:create(cc.DelayTime:create(5), cc.CallFunc:create(function()
-        if self.createPosY > self:getPositionY() then
+        if self.createPosY > self:getPositionY() or (math.abs(self.physicsBody:getVelocity().x)) then
             return
         else
             ----瓶子满了 结束游戏
@@ -145,40 +145,46 @@ function CandyNode:init(id)
     self.sprite = ccui.Button:create(self.imagePath, self.imagePath, self.imagePath)
                       :addTo(self)
     self.size = self.sprite:getContentSize()
-    if not self.physicsBody then
-        local body = cc.PhysicsBody:createCircle(self.size.width * 0.5 + 5, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
-        self.physicsBody = body
-        self:setPhysicsBody(body)
+    --if not self.physicsBody then
+    --    local body = cc.PhysicsBody:createCircle(self.size.width * 0.5 + 5, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
+    --    self.physicsBody = body
+    --    self:setPhysicsBody(body)
+    --
+    --else
+    --    self.physicsBody:removeAllShapes()
+    --    self.physicsBody:addShape(cc.PhysicsShapeCircle:create(self.size.width * 0.5 + 5, MATERIAL_DEFAULT))
+    --    print(self.physicsBody:getCategoryBitmask())
+    --end
+    --
+    --self.physicsBody:setCategoryBitmask(0x01)
+    --self.physicsBody:setContactTestBitmask(0x01)
+    --self.physicsBody:setCollisionBitmask(0x01)
+    --self.physicsBody:addMass(self.id * 100)
+    --self.physicsBody:setEnabled(true)
 
+
+    ---只用于检测挨着的  不能碰撞
+    local maxBody = cc.PhysicsBody:createCircle(self.size.width * 0.5 + 5, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
+    self.sprite:setPhysicsBody(maxBody)
+    maxBody:setCategoryBitmask(0x01)
+    maxBody:setContactTestBitmask(0x01)
+    maxBody:setCollisionBitmask(0)
+    maxBody:setGravityEnable(false)
+
+    ---用于物理碰撞 不需要检测 
+    if not self.physicsBody then
+        local minBody = cc.PhysicsBody:createCircle(self.size.width * 0.5 - 1, MATERIAL_DEFAULT)
+        self:setPhysicsBody(minBody)
+        self.physicsBody = minBody
     else
         self.physicsBody:removeAllShapes()
-        self.physicsBody:addShape(cc.PhysicsShapeCircle:create(self.size.width * 0.5 + 5, MATERIAL_DEFAULT))
+        self.physicsBody:addShape(cc.PhysicsShapeCircle:create(self.size.width * 0.5 - 1, MATERIAL_DEFAULT))
         print(self.physicsBody:getCategoryBitmask())
     end
-
-    self.physicsBody:setCategoryBitmask(0x01)
-    self.physicsBody:setContactTestBitmask(0x01)
-    self.physicsBody:setCollisionBitmask(0x01)
-    self.physicsBody:addMass(self.id * 100)
+    self.physicsBody:setCategoryBitmask(0x02)
+    --minBody:setContactTestBitmask(0x01)
+    self.physicsBody:setCollisionBitmask(0x02)
     self.physicsBody:setEnabled(true)
-
-
-    -----只用于检测挨着的  不能碰撞
-    --local maxBody = cc.PhysicsBody:createCircle(self.size.width * 0.5 + 5, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
-    --self.sprite:setPhysicsBody(maxBody)
-    --maxBody:setDynamic(false)
-    --maxBody:setCategoryBitmask(0x01)
-    --maxBody:setContactTestBitmask(0x01)
-    --maxBody:setCollisionBitmask(0)
-    ----maxBody:setResting(true)
-    ----maxBody:setGravityEnable(false)
-    --
-    -----用于物理碰撞 不需要检测 
-    --local minBody = cc.PhysicsBody:createCircle(self.size.width * 0.5 - 1, MATERIAL_DEFAULT)
-    --self:setPhysicsBody(minBody)
-    --minBody:setCategoryBitmask(0x02)
-    ----minBody:setContactTestBitmask(0x01)
-    --minBody:setCollisionBitmask(0x02)
 
     if self.callback then
         self.sprite:addClickEventListener(self.callback)
@@ -193,24 +199,22 @@ function CandyNode:addClickEventListener(callback)
 end
 
 function CandyNode:onContactBegin(contact)
-    print('009090o0o00oijoj')
-    --local nodeA = contact:getShapeA():getBody():getNode():getParent()
-    --local nodeB = contact:getShapeB():getBody():getNode():getParent()
-    ----print(nodeA, nodeB)
-    --if nodeA ~= self and nodeB ~= self then
-    --    return true
-    --end
-    -----自己和其他发生了碰撞
-    ----- nodeB 设置成自己
-    --if nodeB ~= self then
-    --    local temp = nodeA
-    --    nodeA = nodeB
-    --    nodeB = temp
-    --end
-    --
-    --if (nodeA.id == self.id) then
-    --    self:mergeCheck(nodeA)
-    --end
+    local nodeA = contact:getShapeA():getBody():getNode():getParent()
+    local nodeB = contact:getShapeB():getBody():getNode():getParent()
+    if nodeA ~= self and nodeB ~= self then
+        return true
+    end
+    ---自己和其他发生了碰撞
+    --- nodeB 设置成自己
+    if nodeB ~= self then
+        local temp = nodeA
+        nodeA = nodeB
+        nodeB = temp
+    end
+
+    if (nodeA.id == self.id) then
+        self:mergeCheck(nodeA)
+    end
     return true
 end
 
