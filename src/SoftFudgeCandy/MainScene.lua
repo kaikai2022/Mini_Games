@@ -49,6 +49,7 @@ function MainScene:ctor()
                    :addTo(self.rotateNode)
                    :setScale(scale_value)
                    :move(100 * scale_value, display.realHeight - 100 * scale_value)
+    Sound.playBgMusic()
 end
 
 function MainScene:startGame()

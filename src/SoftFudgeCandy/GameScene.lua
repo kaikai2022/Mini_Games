@@ -11,6 +11,8 @@ local scale_value = display.width / CC_DESIGN_RESOLUTION.width
 local SoundButtonNode = require("SoftFudgeCandy.SoundButtonNode")
 
 local CandyNode = require("SoftFudgeCandy.CandyNode")
+
+local initCandyCount = 40
 function GameScene:ctor()
     local rotateNode = cc.Node:create()
     rotateNode:addTo(self)
@@ -106,7 +108,10 @@ function GameScene:ctor()
                                 cc.FadeTo:create(0.5, 255 * 0.7),
                                 cc.FadeTo:create(0.5, 255),
                                 cc.FadeTo:create(0.5, 255 * 0.7),
+                                cc.FadeTo:create(0.5, 255),
+                                cc.FadeTo:create(0.5, 255 * 0.7),
                                 cc.FadeTo:create(0.5, 255)
+                                
                         ))
                     end
                 end
@@ -120,7 +125,7 @@ end
 
 ---@private 初始化物理世界
 function GameScene:InitPhysicsWord()
-    --self:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL) -- cc.PhysicsWorld. DEBUGDRAW_ALL 显示包围盒 cc.PhysicsWorld.DEBUGDRAW_NONE 不显示包围盒
+    self:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL) -- cc.PhysicsWorld. DEBUGDRAW_ALL 显示包围盒 cc.PhysicsWorld.DEBUGDRAW_NONE 不显示包围盒
 
     local gravity = cc.p(98, 0)
     self:getPhysicsWorld():setGravity(gravity)
@@ -139,7 +144,7 @@ function GameScene:InitPhysicsWord()
     edgeBox:addShape(tempEdgeBox)
 
     CandyNode.setParent(self.candyNodes)
-    for index = 0, 50 do
+    for index = 0, initCandyCount do
         CandyNode:create()
     end
     local delayDoSomething = function(callback, time)
@@ -246,7 +251,7 @@ function GameScene:removeCandyNode(candyNode)
                 cc.Sequence:create(
                         cc.ScaleTo:create(2, 1.3),
                         cc.CallFunc:create(function()
-                            for index = 0, 50 do
+                            for index = 0, initCandyCount do
                                 CandyNode:create()
                             end
                         end),

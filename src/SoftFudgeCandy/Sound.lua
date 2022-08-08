@@ -7,10 +7,11 @@ function Sound.playBgMusic(isLoop)
         return
     end
     if isLoop == nil then
+
         isLoop = true
     end
     engine:stopMusic()
-    --engine:playMusic("PartyWheel/Sound/BGM.mp3", isLoop)
+    engine:playMusic("SoftFudgeCandy/Sound/mainscene.mp3", isLoop)
     print("播放背景音乐")
 end
 
@@ -20,6 +21,22 @@ function Sound.onClicked()
     end
     printf("播放按钮点击声音")
     Sound.playEffect("SoftFudgeCandy/Sound/button.mp3")
+end
+
+---@public playDropBubble 软糖掉落音效
+function Sound.playDropBubble()
+    if Sound.pauseFlag then
+        return
+    end
+    Sound.playEffect("SoftFudgeCandy/Sound/dropbubble.mp3")
+end
+
+---@public SoundPlayMergeBubble 软糖融合音效
+function Sound.SoundPlayMergeBubble()
+    if Sound.pauseFlag then
+        return
+    end
+    Sound.playEffect("SoftFudgeCandy/Sound/mergebubble.mp3")
 end
 
 function Sound.playEffect(path)

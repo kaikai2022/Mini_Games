@@ -6,6 +6,8 @@
 
 local scale_width = display.width / CC_DESIGN_RESOLUTION.width
 
+local Sound = require("SoftFudgeCandy.Sound")
+
 local CandyNode = class("CandyNode", cc.Node)
 ---@private MaxId 最大的糖果等级
 CandyNode.MaxId = 11
@@ -63,6 +65,7 @@ end
 
 function CandyNode:ctor(id)
     self:setCascadeOpacityEnabled(true)
+    Sound.playDropBubble()
     self:init(id)
     if (CandyNode.parent) then
         self:addTo(CandyNode.parent)
@@ -87,6 +90,27 @@ function CandyNode:ctor(id)
     --cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
     --    dump(self.physicsBody:getVelocity())
     --end, 1, false)
+
+    self:runAction(
+            cc.RepeatForever:create(
+                    cc.Sequence:create(
+                            cc.DelayTime:create(2),
+                            cc.CallFunc:create(function()
+                                if self:getPositionY() < -300 then
+                                    self:removeSelf()
+                                end
+                            end)
+                    )
+            )
+    )
+
+    local contactListener = cc.EventListenerPhysicsContact:create()
+    contactListener:registerScriptHandler(handler(self, self.onContactBegin), cc.Handler.EVENT_PHYSICS_CONTACT_BEGIN)
+    contactListener:registerScriptHandler(handler(self, self.onContactSeparate), cc.Handler.EVENT_PHYSICS_CONTACT_SEPARATE)
+    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+    eventDispatcher:addEventListenerWithFixedPriority(contactListener, 1)
+    self.contactListener = contactListener
+    self:addNodeEvent()
 end
 
 ---@public getAllCandyNodes  获取所有的挨着的相同的节点
@@ -122,17 +146,13 @@ function CandyNode:init(id)
                       :addTo(self)
     self.size = self.sprite:getContentSize()
     if not self.physicsBody then
-        local body = cc.PhysicsBody:createCircle(self.size.width * 0.5 - 1, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
+        local body = cc.PhysicsBody:createCircle(self.size.width * 0.5 + 5, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
         self.physicsBody = body
         self:setPhysicsBody(body)
-        local contactListener = cc.EventListenerPhysicsContact:create()
-        contactListener:registerScriptHandler(handler(self, self.onContactBegin), cc.Handler.EVENT_PHYSICS_CONTACT_BEGIN)
-        contactListener:registerScriptHandler(handler(self, self.onContactSeparate), cc.Handler.EVENT_PHYSICS_CONTACT_SEPARATE)
-        local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-        eventDispatcher:addEventListenerWithFixedPriority(contactListener, 1)
+
     else
         self.physicsBody:removeAllShapes()
-        self.physicsBody:addShape(cc.PhysicsShapeCircle:create(self.size.width * 0.5 - 1, MATERIAL_DEFAULT))
+        self.physicsBody:addShape(cc.PhysicsShapeCircle:create(self.size.width * 0.5 + 5, MATERIAL_DEFAULT))
         print(self.physicsBody:getCategoryBitmask())
     end
 
@@ -141,6 +161,24 @@ function CandyNode:init(id)
     self.physicsBody:setCollisionBitmask(0x01)
     self.physicsBody:addMass(self.id * 100)
     self.physicsBody:setEnabled(true)
+
+
+    -----只用于检测挨着的  不能碰撞
+    --local maxBody = cc.PhysicsBody:createCircle(self.size.width * 0.5 + 5, MATERIAL_DEFAULT)  -- 刚体大小，材质类型
+    --self.sprite:setPhysicsBody(maxBody)
+    --maxBody:setDynamic(false)
+    --maxBody:setCategoryBitmask(0x01)
+    --maxBody:setContactTestBitmask(0x01)
+    --maxBody:setCollisionBitmask(0)
+    ----maxBody:setResting(true)
+    ----maxBody:setGravityEnable(false)
+    --
+    -----用于物理碰撞 不需要检测 
+    --local minBody = cc.PhysicsBody:createCircle(self.size.width * 0.5 - 1, MATERIAL_DEFAULT)
+    --self:setPhysicsBody(minBody)
+    --minBody:setCategoryBitmask(0x02)
+    ----minBody:setContactTestBitmask(0x01)
+    --minBody:setCollisionBitmask(0x02)
 
     if self.callback then
         self.sprite:addClickEventListener(self.callback)
@@ -155,28 +193,30 @@ function CandyNode:addClickEventListener(callback)
 end
 
 function CandyNode:onContactBegin(contact)
-    local nodeA = contact:getShapeA():getBody():getNode()
-    local nodeB = contact:getShapeB():getBody():getNode()
-    if nodeA ~= self and nodeB ~= self then
-        return true
-    end
-    ---自己和其他发生了碰撞
-    --- nodeB 设置成自己
-    if nodeB ~= self then
-        local temp = nodeA
-        nodeA = nodeB
-        nodeB = temp
-    end
-
-    if (nodeA.id == self.id) then
-        self:mergeCheck(nodeA)
-    end
+    print('009090o0o00oijoj')
+    --local nodeA = contact:getShapeA():getBody():getNode():getParent()
+    --local nodeB = contact:getShapeB():getBody():getNode():getParent()
+    ----print(nodeA, nodeB)
+    --if nodeA ~= self and nodeB ~= self then
+    --    return true
+    --end
+    -----自己和其他发生了碰撞
+    ----- nodeB 设置成自己
+    --if nodeB ~= self then
+    --    local temp = nodeA
+    --    nodeA = nodeB
+    --    nodeB = temp
+    --end
+    --
+    --if (nodeA.id == self.id) then
+    --    self:mergeCheck(nodeA)
+    --end
     return true
 end
 
 function CandyNode:onContactSeparate(contact)
-    local nodeA = contact:getShapeA():getBody():getNode()
-    local nodeB = contact:getShapeB():getBody():getNode()
+    local nodeA = contact:getShapeA():getBody():getNode():getParent()
+    local nodeB = contact:getShapeB():getBody():getNode():getParent()
     if nodeA ~= self and nodeB ~= self then
         return true
     end
@@ -287,6 +327,7 @@ function CandyNode:merging()
                 end)
         ))
     end
+    Sound.SoundPlayMergeBubble()
 end
 
 function CandyNode:upgrade(count)
@@ -302,6 +343,18 @@ function CandyNode:score()
     print("开始加分 且删除自己")
     cc.Director:getInstance():getRunningScene():removeCandyNode(self)
     delayDoSomething(handler(self, self.removeSelf), 0.2)
+end
+
+function CandyNode:addNodeEvent()
+    --场景节点事件处理
+    local function onNodeEvent(event)
+        if event == "cleanup" then
+            print("cleanup CandyNode")
+            local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+            eventDispatcher:removeEventListener(self.contactListener)
+        end
+    end
+    self:registerScriptHandler(onNodeEvent)
 end
 
 return CandyNode
