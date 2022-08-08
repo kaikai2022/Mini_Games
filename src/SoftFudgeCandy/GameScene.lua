@@ -60,12 +60,12 @@ function GameScene:ctor()
 
     self:InitPhysicsWord()
 
-    ccui.Button:create("SoftFudgeCandy/images/game/score_bg.png")
-        :addTo(self.bg)
-        :addClickEventListener(function()
-        --self:removeCandyNode({ id = 12 })
-        self:gameOver()
-    end)
+    --ccui.Button:create("SoftFudgeCandy/images/game/score_bg.png")
+    --    :addTo(self.bg)
+    --    :addClickEventListener(function()
+    --    --self:removeCandyNode({ id = 12 })
+    --    self:gameOver()
+    --end)
 
     --newCandyNode = function()
     --    CandyNode:create()
