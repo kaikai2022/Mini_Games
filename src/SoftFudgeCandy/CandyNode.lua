@@ -17,20 +17,6 @@ function CandyNode.setParent(parent)
 end
 
 
--- 延时调用
--- @params callback(function) 回调函数
--- @params time(float) 延时时间(s)
--- @return 定时器
-local delayDoSomething = function(callback, time)
-    local handle
-    handle = cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
-        cc.Director:getInstance():getScheduler():unscheduleScriptEntry(handle)
-        callback()
-    end, time, false)
-
-    return handle
-end
-
 ---@private table_deduplicate_add table去重添加
 ---@param table_ table 需要添加的table
 ---@param item data 数据
@@ -184,7 +170,7 @@ function CandyNode:init(id)
     self.physicsBody:setCategoryBitmask(0x02)
     --minBody:setContactTestBitmask(0x01)
     self.physicsBody:setCollisionBitmask(0x02)
-    self.physicsBody:setEnabled(true)
+    self.physicsBody:setDynamic(true)
 
     if self.callback then
         self.sprite:addClickEventListener(self.callback)
@@ -303,7 +289,9 @@ function CandyNode:merging()
     ---移除自己
     for k, node in ipairs(temp) do
         --node.physicsBody:removeFromWorld()
-        node.physicsBody:setEnabled(false)
+        --node.physicsBody:setEnabled(false)
+        node.physicsBody:setDynamic(false)
+        node.sprite:setEnabled(false)
         node:runAction(
                 cc.Sequence:create(
                         cc.MoveTo:create(0.5, cc.p(self:getPositionX(), self:getPositionY())),
@@ -320,14 +308,14 @@ function CandyNode:merging()
     if self.id < CandyNode.MaxId then
         self:runAction(cc.Sequence:create(
                 cc.CallFunc:create(function()
-                    self.sprite:setEnabled(false)
+                    --self.sprite:setEnabled(false)
                     self.imagePath = string.format("SoftFudgeCandy/images/game/merging/%s.png", self.id)
                     self.sprite:loadTextures(self.imagePath, self.imagePath, self.imagePath)
                 end),
         --cc.MoveTo:create(0.5, cc.p(self:getPositionX(), self:getPositionY())),
                 cc.DelayTime:create(0.5),
                 cc.CallFunc:create(function()
-                    self.sprite:setEnabled(true)
+                    --self.sprite:setEnabled(true)
                 end)
         ))
     end
