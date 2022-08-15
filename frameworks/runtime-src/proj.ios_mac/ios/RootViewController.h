@@ -25,11 +25,12 @@
  ****************************************************************************/
 
 #import <UIKit/UIKit.h>
-
+@class GADBannerView;
 
 @interface RootViewController : UIViewController {
 
 }
 - (BOOL) prefersStatusBarHidden;
-
+//@property(nonatomic, weak) IBOutlet GADBannerView *bannerView;
+@property(nonatomic, strong) GADBannerView *bannerView;
 @end

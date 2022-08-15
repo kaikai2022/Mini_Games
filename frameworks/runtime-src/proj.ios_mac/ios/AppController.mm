@@ -28,7 +28,7 @@
 #import "cocos2d.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
-
+#import <GoogleMobileAds/GoogleMobileAds.h>
 @implementation AppController
 
 @synthesize window;
@@ -40,7 +40,7 @@
 static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
     cocos2d::Application *app = cocos2d::Application::getInstance();
     
     // Initialize the GLView attributes

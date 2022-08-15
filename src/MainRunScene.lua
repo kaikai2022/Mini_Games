@@ -12,7 +12,7 @@ local scenes = {
         isPhysics = false,
         layer = "SoftFudgeCandy.MainScene"
     },
-    
+
     --- 跳跳熊
     {
         name = "跳跳熊",
@@ -47,7 +47,7 @@ local scenes = {
         isPhysics = true,
         layer = "RunFromBlack.MainScene"   -- 逃离黑洞
     },
-    
+
     ---金刚大战
     {
         name = "金刚大战",
@@ -100,7 +100,20 @@ function MainRunScene:ctor()
 
     scaleView:setLayoutType(ccui.LayoutType.VERTICAL)
 end
+local isHow = true
 function MainRunScene:runGame(sender)
+    --local sdk = require("Cocos2dxiOSLuaSDK")
+    ----sdk:showDetailPageWithProductId("09qweqwe", function(result)
+    ----    print("回调：", result)
+    ----end)
+    --if isHow then
+    --    sdk:hideGodAdBannerView()
+    --else
+    --    sdk:showGodAdBannerView()
+    --end
+    --isHow = not isHow
+    --
+    --return
     local game = self.buttons[sender]
     print(game.name)
     local scene = nil
