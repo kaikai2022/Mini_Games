@@ -1,7 +1,6 @@
 /****************************************************************************
  Copyright (c) 2010-2013 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -26,13 +25,19 @@
 
 #import <UIKit/UIKit.h>
 
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+
+#import <UserNotifications/UserNotifications.h>
+
+#endif
+
 @class RootViewController;
 
-@interface AppController : NSObject <UIApplicationDelegate> {
+@interface AppController : NSObject <UIApplicationDelegate, UNUserNotificationCenterDelegate> {
 
 }
 
-@property(nonatomic, readonly) RootViewController* viewController;
+@property(nonatomic, readonly) RootViewController *viewController;
 
 @end
 

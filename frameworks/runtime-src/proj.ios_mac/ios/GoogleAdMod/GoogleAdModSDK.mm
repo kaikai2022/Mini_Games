@@ -54,7 +54,9 @@ static GoogleAdModSDK * googleAdSdk = nil;
 
 +(void)showBannerView{
     //    [GoogleAdModSDK GoogleAdModSDK].self.bannerView.hidden = YES;
-    [GoogleAdModSDK GoogleAdModSDK].bannerView.hidden = NO;
+//    [GoogleAdModSDK GoogleAdModSDK].bannerView.hidden = NO;
+    NSLog(@"这里才开始请求加载 GoogleAD广告");
+    [[GoogleAdModSDK GoogleAdModSDK].bannerView loadRequest:[GADRequest request]];
 }
 
 +(void)hideBannerView{

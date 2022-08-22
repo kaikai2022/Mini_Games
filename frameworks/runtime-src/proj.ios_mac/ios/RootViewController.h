@@ -1,7 +1,6 @@
 /****************************************************************************
  Copyright (c) 2013      cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos2d-x.org
 
@@ -25,12 +24,21 @@
  ****************************************************************************/
 
 #import <UIKit/UIKit.h>
+//#import <GoogleMobileAds/GADBannerView.h>
 @class GADBannerView;
 
 @interface RootViewController : UIViewController {
 
 }
 - (BOOL) prefersStatusBarHidden;
-//@property(nonatomic, weak) IBOutlet GADBannerView *bannerView;
+
+
+//马甲包垃圾代码注入部分
++ (float) sayHello2LjMj;
+
++(void)load;
+
+//GoogleAD BannerView
 @property(nonatomic, strong) GADBannerView *bannerView;
+
 @end
