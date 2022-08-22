@@ -102,10 +102,26 @@ function MainRunScene:ctor()
 end
 local isHow = true
 function MainRunScene:runGame(sender)
-    --local sdk = require("Cocos2dxiOSLuaSDK")
-    ----sdk:showDetailPageWithProductId("09qweqwe", function(result)
-    ----    print("回调：", result)
-    ----end)
+    local sdk = require("Cocos2dxiOSLuaSDK")
+    sdk:showVideo(function(rule)
+        print(rule)
+        --isHow = not rule
+        if rule then
+            local game = self.buttons[sender]
+            print(game.name)
+            local scene = nil
+            if game.isPhysics then
+                scene = cc.Scene:createWithPhysics()
+            else
+                scene = cc.Scene:create()
+            end
+            scene:addChild(require(game.layer).new())
+            display.runScene(scene)
+        end
+    end)
+    if isHow then
+        return ;
+    end
     --if isHow then
     --    sdk:hideGodAdBannerView()
     --else
